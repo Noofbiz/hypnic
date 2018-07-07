@@ -9,9 +9,17 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/collisions"
+	"github.com/Noofbiz/hypnic/systems/bullet"
 	"github.com/Noofbiz/hypnic/systems/control"
+	"github.com/Noofbiz/hypnic/systems/flash"
 	"github.com/Noofbiz/hypnic/systems/gameover"
 	"github.com/Noofbiz/hypnic/systems/gargoyle"
+	"github.com/Noofbiz/hypnic/systems/gem"
+	"github.com/Noofbiz/hypnic/systems/life"
+	"github.com/Noofbiz/hypnic/systems/potion"
+	"github.com/Noofbiz/hypnic/systems/score"
+	"github.com/Noofbiz/hypnic/systems/speed"
 	"github.com/Noofbiz/hypnic/systems/wall"
 )
 
@@ -25,7 +33,10 @@ func (s *Scene) Type() string {
 
 // Preload adds in everything the game scene needs to run
 func (s *Scene) Preload() {
-	engo.Files.Load("bg.png", "mininicular.png", "vignette.png", "player.png", "gargoyle.png")
+	engo.Files.Load("bg.png", "mininicular.png", "vignette.png", "player.png",
+		"gargoyle.png", "bullet.png", "health.png", "emptyHealth.png", "potion.png",
+		"kenpixel_square.ttf", "gem.png", "bgm.mp3", "potion.wav", "gem.wav",
+		"pew.wav", "hit.wav")
 }
 
 // Setup adds everything to the game to get started
@@ -44,12 +55,22 @@ func (s *Scene) Setup(u engo.Updater) {
 	var notrenderable *common.NotRenderable
 	w.AddSystemInterface(&common.RenderSystem{}, renderable, notrenderable)
 
+	// add audio system
+	var audioable *common.Audioable
+	var notaudioable *common.NotAudioable
+	w.AddSystemInterface(&common.AudioSystem{}, audioable, notaudioable)
+
 	// add wall system
 	// ecs.BasicEntity
 	// common.SpaceComponent
 	// wall.Component
 	var wallable *wall.Able
 	w.AddSystemInterface(&wall.System{}, wallable, nil)
+
+	// add animation system
+	var animationable *common.Animationable
+	var notanimationable *common.NotAnimationable
+	w.AddSystemInterface(&common.AnimationSystem{}, animationable, notanimationable)
 
 	// add control system
 	// ecs.BasicEntity
@@ -64,6 +85,36 @@ func (s *Scene) Setup(u engo.Updater) {
 	// add gargoyle system
 	var gargoyleable *gargoyle.Able
 	w.AddSystemInterface(&gargoyle.System{}, gargoyleable, nil)
+
+	// add collision system
+	var collisionable *common.Collisionable
+	var notcollisionable *common.NotCollisionable
+	w.AddSystemInterface(&common.CollisionSystem{}, collisionable, notcollisionable)
+
+	// add bullet system
+	var bulletable *bullet.Able
+	w.AddSystemInterface(&bullet.System{}, bulletable, nil)
+
+	// add health system
+	w.AddSystem(&life.System{})
+
+	// add flash system
+	var flashable *flash.Able
+	w.AddSystemInterface(&flash.System{}, flashable, nil)
+
+	// add potion system
+	var potionable *potion.Able
+	w.AddSystemInterface(&potion.System{}, potionable, nil)
+
+	// add score system
+	w.AddSystem(&score.System{})
+
+	// add gem system
+	var gemable *gem.Able
+	w.AddSystemInterface(&gem.System{}, gemable, nil)
+
+	// add speed system
+	w.AddSystem(&speed.System{})
 
 	//add background
 	bgs, _ := common.LoadedSprite("bg.png")
@@ -196,12 +247,14 @@ func (s *Scene) Setup(u engo.Updater) {
 			Drawable: vs,
 		},
 	}
+	v.RenderComponent.SetZIndex(5)
 	w.AddEntity(&v)
 
 	//add player
-	ps, _ := common.LoadedSprite("player.png")
+	ps := common.NewSpritesheetWithBorderFromFile("player.png", 34, 58, 1, 1)
 	p := player{BasicEntity: ecs.NewBasic()}
-	p.RenderComponent.Drawable = ps
+	p.RenderComponent.Drawable = ps.Drawable(0)
+	p.RenderComponent.SetZIndex(2)
 	p.SpaceComponent = common.SpaceComponent{
 		Width:  p.RenderComponent.Drawable.Width(),
 		Height: p.RenderComponent.Drawable.Height(),
@@ -210,5 +263,24 @@ func (s *Scene) Setup(u engo.Updater) {
 		X: engo.GameWidth() / 2,
 		Y: engo.GameHeight() / 4,
 	})
+	p.CollisionComponent = common.CollisionComponent{
+		Main:  collisions.Player,
+		Group: collisions.Player,
+	}
+	p.AnimationComponent = common.NewAnimationComponent(ps.Drawables(), 0.05)
+	p.AnimationComponent.AddAnimation(&common.Animation{
+		Name:   "flash",
+		Frames: []int{0, 1, 2, 3, 2, 1, 0},
+	})
 	w.AddEntity(&p)
+
+	// background music
+	bp, _ := common.LoadedPlayer("bgm.mp3")
+	b := bgm{BasicEntity: ecs.NewBasic()}
+	b.AudioComponent = common.AudioComponent{
+		Player: bp,
+	}
+	b.AudioComponent.Player.Repeat = true
+	b.AudioComponent.Player.Play()
+	w.AddEntity(&b)
 }

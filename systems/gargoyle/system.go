@@ -6,6 +6,8 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+
+	"github.com/Noofbiz/hypnic/messages"
 )
 
 // System is a system for the gargoyles
@@ -15,13 +17,26 @@ type System struct {
 	entities []entity
 
 	speed, elapsed, wait float32
+	max, min, increment  float32
 }
 
 // New is called when the system is added to the World
 func (s *System) New(w *ecs.World) {
 	s.w = w
 	s.speed = 30
-	s.wait = 10
+	s.wait = 7
+	s.max = 10
+	s.min = 3
+	s.increment = 5
+	engo.Mailbox.Listen(messages.SpeedType, func(m engo.Message) {
+		_, ok := m.(messages.Speed)
+		if !ok {
+			return
+		}
+		s.max -= 1
+		s.min -= 0.15
+		s.increment += 0.5
+	})
 }
 
 // Add adds an entity to the system
@@ -57,26 +72,35 @@ func (s *System) Update(dt float32) {
 		if r == 0 {
 			s.addGargoyle()
 		} else if r == 1 {
-			s.wait -= 5 * rand.Float32()
-			if s.wait < 5 {
-				s.wait = 5
+			s.wait -= s.increment * rand.Float32()
+			if s.wait < s.min {
+				s.wait = s.min
 			}
 		} else {
 			s.addGargoyle()
-			s.wait += 5 * rand.Float32()
-			if s.wait > 15 {
-				s.wait = 15
+			s.wait += s.increment * rand.Float32()
+			if s.wait > s.max {
+				s.wait = s.max
 			}
 		}
 		s.elapsed = 0
 	}
-	for _, e := range s.entities {
-		e.Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
-		e.elapsed += dt
-		if e.elapsed < e.charge && e.charges > 0 {
-			//fire!
-			e.elapsed = 0
-			e.charges--
+	for i := 0; i < len(s.entities); i++ {
+		s.entities[i].Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
+		s.entities[i].elapsed += dt
+		if s.entities[i].elapsed > s.entities[i].charge && s.entities[i].charges > 0 {
+			engo.Mailbox.Dispatch(messages.CreateBullet{
+				Position: engo.Point{
+					X: s.entities[i].Position.X + (s.entities[i].Width / 2),
+					Y: s.entities[i].Position.Y + (s.entities[i].Height / 2),
+				},
+				Angle: rand.Float32()*70 - 35,
+			})
+			s.entities[i].elapsed = 0
+			s.entities[i].charges--
+		}
+		if s.entities[i].Position.Y < -66 {
+			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}
 }
@@ -85,15 +109,16 @@ func (s *System) addGargoyle() {
 	gs, _ := common.LoadedSprite("gargoyle.png")
 	g := gargoyle{BasicEntity: ecs.NewBasic()}
 	g.RenderComponent.Drawable = gs
+	g.RenderComponent.SetZIndex(1)
 	g.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{
-			X: rand.Float32()*(engo.GameWidth()-64) + 32,
+			X: rand.Float32()*(engo.GameWidth()-64-g.RenderComponent.Drawable.Width()) + 32,
 			Y: engo.GameHeight(),
 		},
 		Width:  g.RenderComponent.Drawable.Width(),
 		Height: g.RenderComponent.Drawable.Height(),
 	}
-	g.Component.charge = rand.Float32()*5 + 1
-	g.Component.charges = rand.Intn(5)
+	g.Component.charge = rand.Float32() + 0.25
+	g.Component.charges = rand.Intn(7) + 3
 	s.w.AddEntity(&g)
 }

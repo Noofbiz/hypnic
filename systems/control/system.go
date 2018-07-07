@@ -12,6 +12,7 @@ import (
 type System struct {
 	player entity
 	speed  float32
+	audio  *common.Player
 }
 
 // New is called when the system is added to the world
@@ -44,7 +45,16 @@ func (s *System) Update(dt float32) {
 		X: s.speed * engo.Input.Axis("movement").Value(),
 		Y: 0,
 	})
-	if s.player.Position.X < 31 || s.player.Position.X > engo.GameWidth()-65 {
-		engo.Mailbox.Dispatch(messages.GameOver{})
+	if s.player.Position.X < 31 {
+		engo.Mailbox.Dispatch(messages.Damage{
+			Amount: -5,
+		})
+		s.player.Position.X = 32
+	}
+	if s.player.Position.X > engo.GameWidth()-64 {
+		engo.Mailbox.Dispatch(messages.Damage{
+			Amount: -5,
+		})
+		s.player.Position.X = engo.GameWidth() - 65
 	}
 }

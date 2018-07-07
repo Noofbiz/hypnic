@@ -10,3 +10,10 @@ type entity struct {
 	*common.SpaceComponent
 	*Component
 }
+
+type anim struct {
+	*ecs.BasicEntity
+	*common.SpaceComponent
+	*common.RenderComponent
+	*common.AnimationComponent
+}
