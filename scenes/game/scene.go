@@ -24,7 +24,10 @@ import (
 )
 
 // Scene is the scene the game is played in
-type Scene struct{}
+type Scene struct {
+	BGM, SFX     bool
+	MLvl, SFXLvl float64
+}
 
 // Type returns the type of scene this is
 func (s *Scene) Type() string {
@@ -93,10 +96,16 @@ func (s *Scene) Setup(u engo.Updater) {
 
 	// add bullet system
 	var bulletable *bullet.Able
-	w.AddSystemInterface(&bullet.System{}, bulletable, nil)
+	w.AddSystemInterface(&bullet.System{
+		SFX:    s.SFX,
+		SFXLvl: s.SFXLvl,
+	}, bulletable, nil)
 
 	// add health system
-	w.AddSystem(&life.System{})
+	w.AddSystem(&life.System{
+		SFX:    s.SFX,
+		SFXLvl: s.SFXLvl,
+	})
 
 	// add flash system
 	var flashable *flash.Able
@@ -104,14 +113,20 @@ func (s *Scene) Setup(u engo.Updater) {
 
 	// add potion system
 	var potionable *potion.Able
-	w.AddSystemInterface(&potion.System{}, potionable, nil)
+	w.AddSystemInterface(&potion.System{
+		SFX:    s.SFX,
+		SFXLvl: s.SFXLvl,
+	}, potionable, nil)
 
 	// add score system
 	w.AddSystem(&score.System{})
 
 	// add gem system
 	var gemable *gem.Able
-	w.AddSystemInterface(&gem.System{}, gemable, nil)
+	w.AddSystemInterface(&gem.System{
+		SFX:    s.SFX,
+		SFXLvl: s.SFXLvl,
+	}, gemable, nil)
 
 	// add speed system
 	w.AddSystem(&speed.System{})
@@ -281,6 +296,9 @@ func (s *Scene) Setup(u engo.Updater) {
 		Player: bp,
 	}
 	b.AudioComponent.Player.Repeat = true
-	b.AudioComponent.Player.Play()
+	b.AudioComponent.Player.SetVolume(s.MLvl)
+	if s.BGM {
+		b.AudioComponent.Player.Play()
+	}
 	w.AddEntity(&b)
 }

@@ -12,6 +12,9 @@ import (
 
 // System is the bullet system
 type System struct {
+	SFX    bool
+	SFXLvl float64
+
 	entities []entity
 
 	w *ecs.World
@@ -30,7 +33,7 @@ func (s *System) New(w *ecs.World) {
 	s.speed = 2.5
 
 	pewp, _ := common.LoadedPlayer("pew.wav")
-	pewp.SetVolume(0.75)
+	pewp.SetVolume(0.75 * s.SFXLvl)
 	pew := sound{BasicEntity: ecs.NewBasic()}
 	pew.AudioComponent.Player = pewp
 	w.AddEntity(&pew)
@@ -59,8 +62,10 @@ func (s *System) New(w *ecs.World) {
 		b.AnimationComponent.AddDefaultAnimation(s.animation)
 		b.CollisionComponent.Group = collisions.Player
 		w.AddEntity(&b)
-		pewp.Rewind()
-		pewp.Play()
+		if s.SFX {
+			pewp.Rewind()
+			pewp.Play()
+		}
 	})
 	engo.Mailbox.Listen("CollisionMessage", func(m engo.Message) {
 		msg, ok := m.(common.CollisionMessage)

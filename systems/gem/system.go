@@ -11,6 +11,9 @@ import (
 )
 
 type System struct {
+	SFX    bool
+	SFXLvl float64
+
 	w                    *ecs.World
 	entities             []entity
 	speed, elapsed, wait float32
@@ -27,6 +30,7 @@ func (s *System) New(w *ecs.World) {
 	s.increment = 3
 
 	s.player, _ = common.LoadedPlayer("gem.wav")
+	s.player.SetVolume(s.SFXLvl)
 	p := sound{BasicEntity: ecs.NewBasic()}
 	p.AudioComponent.Player = s.player
 	w.AddEntity(&p)
@@ -49,8 +53,10 @@ func (s *System) New(w *ecs.World) {
 		}
 		d := s.elementExists(*msg.To.BasicEntity)
 		if d >= 0 {
-			s.player.Rewind()
-			s.player.Play()
+			if s.SFX {
+				s.player.Rewind()
+				s.player.Play()
+			}
 			engo.Mailbox.Dispatch(messages.Score{
 				Amount: 50,
 			})
