@@ -1,9 +1,8 @@
-package credits
+package menu
 
 import (
-	"fmt"
-
 	"engo.io/ecs"
+	"engo.io/engo"
 	"engo.io/engo/common"
 )
 
@@ -19,6 +18,6 @@ func (s *System) Remove(basic ecs.BasicEntity) {}
 
 func (s *System) Update(float32) {
 	if s.e.Clicked {
-		fmt.Println("credits roll")
+		engo.SetSceneByName("MainMenuScene", true)
 	}
 }

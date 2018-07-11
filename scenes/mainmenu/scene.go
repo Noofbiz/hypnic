@@ -7,7 +7,7 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
-	"github.com/Noofbiz/hypnic/systems/credits"
+	"github.com/Noofbiz/hypnic/systems/creditsbtn"
 	"github.com/Noofbiz/hypnic/systems/gamestart"
 	"github.com/Noofbiz/hypnic/systems/musicbx"
 	"github.com/Noofbiz/hypnic/systems/musicdown"
@@ -35,6 +35,9 @@ func (s *Scene) Preload() {
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
 	common.SetBackground(color.White)
+
+	// register main menu scene
+	engo.RegisterScene(&Scene{})
 
 	// Add Render System
 	// To be added to the render system needs
@@ -80,7 +83,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	w.AddSystem(sadj)
 
 	// add credits system
-	crds := &credits.System{}
+	crds := &creditsbtn.System{}
 	w.AddSystem(crds)
 
 	// add sfx checkbox system

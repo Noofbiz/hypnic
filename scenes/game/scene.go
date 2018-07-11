@@ -49,6 +49,14 @@ func (s *Scene) Setup(u engo.Updater) {
 
 	rand.Seed(time.Now().UnixNano())
 
+	// save game scene with current run stuffs
+	engo.RegisterScene(&Scene{
+		BGM:    s.BGM,
+		SFX:    s.SFX,
+		MLvl:   s.MLvl,
+		SFXLvl: s.SFXLvl,
+	})
+
 	// Add Render System
 	// To be added to the render system needs
 	// ecs.BasicEntity

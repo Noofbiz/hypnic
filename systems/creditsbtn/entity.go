@@ -1,4 +1,4 @@
-package credits
+package creditsbtn
 
 import (
 	"engo.io/ecs"
