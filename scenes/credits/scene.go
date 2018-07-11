@@ -31,7 +31,7 @@ func (s *Scene) Preload() {
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
 	s.w = w
-	common.SetBackground(color.White)
+	common.SetBackground(color.Black)
 
 	// Add Render System
 	var renderable *common.Renderable

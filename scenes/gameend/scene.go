@@ -26,7 +26,7 @@ func (s *Scene) Preload() {
 
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
-	common.SetBackground(color.White)
+	common.SetBackground(color.Black)
 
 	// Add Render System
 	// To be added to the render system needs

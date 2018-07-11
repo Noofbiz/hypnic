@@ -34,7 +34,7 @@ func (s *Scene) Preload() {
 
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
-	common.SetBackground(color.White)
+	common.SetBackground(color.Black)
 
 	// register main menu scene
 	engo.RegisterScene(&Scene{})

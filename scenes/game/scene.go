@@ -45,7 +45,7 @@ func (s *Scene) Preload() {
 // Setup adds everything to the game to get started
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
-	common.SetBackground(color.White)
+	common.SetBackground(color.Black)
 
 	rand.Seed(time.Now().UnixNano())
 
