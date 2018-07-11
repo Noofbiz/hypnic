@@ -6,6 +6,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"engo.io/engo/math"
 
 	"github.com/Noofbiz/hypnic/messages"
 )
@@ -16,8 +17,11 @@ type System struct {
 
 	entities []entity
 
-	speed, elapsed, wait float32
-	max, min, increment  float32
+	playerposition engo.Point
+
+	speed, elapsed, wait    float32
+	max, min, increment     float32
+	mincharges, randcharges int
 }
 
 // New is called when the system is added to the World
@@ -28,14 +32,25 @@ func (s *System) New(w *ecs.World) {
 	s.max = 10
 	s.min = 3
 	s.increment = 5
+	s.mincharges = 1
+	s.randcharges = 3
 	engo.Mailbox.Listen(messages.SpeedType, func(m engo.Message) {
 		_, ok := m.(messages.Speed)
 		if !ok {
 			return
 		}
-		s.max -= 1
+		s.max--
 		s.min -= 0.15
 		s.increment += 0.5
+		s.mincharges++
+		s.randcharges += 2
+	})
+	engo.Mailbox.Listen(messages.GetPlayerPositionType, func(m engo.Message) {
+		msg, ok := m.(messages.GetPlayerPosition)
+		if !ok {
+			return
+		}
+		s.playerposition = msg.Position
 	})
 }
 
@@ -89,12 +104,12 @@ func (s *System) Update(dt float32) {
 		s.entities[i].Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
 		s.entities[i].elapsed += dt
 		if s.entities[i].elapsed > s.entities[i].charge && s.entities[i].charges > 0 {
+			engo.Mailbox.Dispatch(messages.SendPlayerPosition{})
+			pt := s.entities[i].SpaceComponent.Center()
+			a := math.Atan((pt.X - s.playerposition.X) / (pt.Y - s.playerposition.Y))
 			engo.Mailbox.Dispatch(messages.CreateBullet{
-				Position: engo.Point{
-					X: s.entities[i].Position.X + (s.entities[i].Width / 2),
-					Y: s.entities[i].Position.Y + (s.entities[i].Height / 2),
-				},
-				Angle: rand.Float32()*70 - 35,
+				Position: pt,
+				Angle:    a,
 			})
 			s.entities[i].elapsed = 0
 			s.entities[i].charges--
@@ -119,6 +134,6 @@ func (s *System) addGargoyle() {
 		Height: g.RenderComponent.Drawable.Height(),
 	}
 	g.Component.charge = rand.Float32() + 0.25
-	g.Component.charges = rand.Intn(7) + 3
+	g.Component.charges = rand.Intn(s.randcharges) + s.mincharges
 	s.w.AddEntity(&g)
 }

@@ -103,7 +103,7 @@ func (s *System) Remove(basic ecs.BasicEntity) {
 // Update is called each frame
 func (s *System) Update(dt float32) {
 	for i := 0; i < len(s.entities); i++ {
-		sin, cos := math.Sincos(s.entities[i].Angle * math.Pi / 180)
+		sin, cos := math.Sincos(s.entities[i].Angle)
 		s.entities[i].Position.Subtract(engo.Point{
 			X: s.speed * sin,
 			Y: s.speed * cos,

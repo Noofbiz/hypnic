@@ -23,6 +23,16 @@ func (s *System) New(w *ecs.World) {
 		engo.AxisKeyPair{Min: engo.KeyA, Max: engo.KeyD},
 	)
 	s.speed = 3
+
+	engo.Mailbox.Listen(messages.SendPlayerPositionType, func(m engo.Message) {
+		_, ok := m.(messages.SendPlayerPosition)
+		if !ok {
+			return
+		}
+		engo.Mailbox.Dispatch(messages.GetPlayerPosition{
+			Position: s.player.SpaceComponent.Center(),
+		})
+	})
 }
 
 // Add adds the player to the system
