@@ -140,6 +140,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Font: tfnt,
 		Text: "hypnic",
 	}
+	t.RenderComponent.SetZIndex(1)
 	t.SpaceComponent.Position = engo.Point{
 		X: 120,
 		Y: 20,
@@ -150,6 +151,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	gs, _ := common.LoadedSprite("gargoyle.png")
 	g := label{BasicEntity: ecs.NewBasic()}
 	g.RenderComponent.Drawable = gs
+	g.RenderComponent.SetZIndex(1)
 	g.SpaceComponent.Position = engo.Point{
 		X: 60,
 		Y: 10,
@@ -160,6 +162,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	ms := common.NewSpritesheetWithBorderFromFile("player.png", 34, 58, 1, 1)
 	m := label{BasicEntity: ecs.NewBasic()}
 	m.RenderComponent.Drawable = ms.Drawable(0)
+	m.RenderComponent.SetZIndex(1)
 	m.SpaceComponent.Position = engo.Point{
 		X: 225,
 		Y: 15,
@@ -170,6 +173,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	ps, _ := common.LoadedSprite("scroll.png")
 	p := label{BasicEntity: ecs.NewBasic()}
 	p.RenderComponent.Drawable = ps
+	p.RenderComponent.SetZIndex(1)
 	p.SpaceComponent.Position = engo.Point{
 		X: 10,
 		Y: 80,
@@ -180,7 +184,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	sgs, _ := common.LoadedSprite("button.png")
 	sg := button{BasicEntity: ecs.NewBasic()}
 	sg.RenderComponent.Drawable = sgs
-	sg.RenderComponent.SetZIndex(1)
+	sg.RenderComponent.SetZIndex(2)
 	sg.SpaceComponent.Position = engo.Point{
 		X: 20,
 		Y: 100,
@@ -196,7 +200,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Font: tfnt,
 		Text: "Start",
 	}
-	sgt.RenderComponent.SetZIndex(2)
+	sgt.RenderComponent.SetZIndex(3)
 	sgt.SpaceComponent.Position = engo.Point{
 		X: 130,
 		Y: 120,
@@ -206,7 +210,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	// Credits
 	c := button{BasicEntity: ecs.NewBasic()}
 	c.RenderComponent.Drawable = sgs
-	c.RenderComponent.SetZIndex(1)
+	c.RenderComponent.SetZIndex(2)
 	c.SpaceComponent.Position = engo.Point{
 		X: 20,
 		Y: 380,
@@ -222,7 +226,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Font: tfnt,
 		Text: "Credits",
 	}
-	ct.RenderComponent.SetZIndex(2)
+	ct.RenderComponent.SetZIndex(3)
 	ct.SpaceComponent.Position = engo.Point{
 		X: 110,
 		Y: 400,
@@ -241,7 +245,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Font: bfnt,
 		Text: "Music",
 	}
-	ml.RenderComponent.SetZIndex(1)
+	ml.RenderComponent.SetZIndex(2)
 	ml.SpaceComponent.Position = engo.Point{
 		X: 60,
 		Y: 180,
@@ -252,7 +256,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	mcbs, _ := common.LoadedSprite("checked.png")
 	mcb := button{BasicEntity: ecs.NewBasic()}
 	mcb.RenderComponent.Drawable = mcbs
-	mcb.RenderComponent.SetZIndex(2)
+	mcb.RenderComponent.SetZIndex(3)
 	mcb.SpaceComponent.Position = engo.Point{
 		X: 135,
 		Y: 185,
@@ -325,7 +329,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Font: bfnt,
 		Text: "SFX",
 	}
-	sl.RenderComponent.SetZIndex(1)
+	sl.RenderComponent.SetZIndex(2)
 	sl.SpaceComponent.Position = engo.Point{
 		X: 60,
 		Y: 280,
@@ -335,7 +339,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	// SFX Checkbox
 	scb := button{BasicEntity: ecs.NewBasic()}
 	scb.RenderComponent.Drawable = mcbs
-	scb.RenderComponent.SetZIndex(2)
+	scb.RenderComponent.SetZIndex(3)
 	scb.SpaceComponent.Position = engo.Point{
 		X: 115,
 		Y: 285,
