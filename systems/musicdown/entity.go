@@ -8,4 +8,5 @@ import (
 type entity struct {
 	*ecs.BasicEntity
 	*common.MouseComponent
+	*common.AudioComponent
 }

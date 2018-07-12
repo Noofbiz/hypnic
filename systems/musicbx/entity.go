@@ -9,4 +9,5 @@ type entity struct {
 	*ecs.BasicEntity
 	*common.MouseComponent
 	*common.RenderComponent
+	*common.AudioComponent
 }

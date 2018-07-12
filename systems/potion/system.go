@@ -6,14 +6,13 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+
 	"github.com/Noofbiz/hypnic/collisions"
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 type System struct {
-	SFX    bool
-	SFXLvl float64
-
 	w                    *ecs.World
 	entities             []entity
 	speed, elapsed, wait float32
@@ -30,7 +29,7 @@ func (s *System) New(w *ecs.World) {
 	s.increment = 5
 
 	s.player, _ = common.LoadedPlayer("potion.wav")
-	s.player.SetVolume(s.SFXLvl)
+	s.player.SetVolume(options.TheOptions.SFXLevel)
 	p := sound{BasicEntity: ecs.NewBasic()}
 	p.AudioComponent.Player = s.player
 	w.AddEntity(&p)
@@ -53,7 +52,7 @@ func (s *System) New(w *ecs.World) {
 		}
 		d := s.elementExists(*msg.To.BasicEntity)
 		if d >= 0 {
-			if s.SFX {
+			if options.TheOptions.SFX {
 				s.player.Rewind()
 				s.player.Play()
 			}

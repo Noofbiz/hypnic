@@ -1,4 +1,4 @@
-package musicup
+package newhighscore
 
 import (
 	"engo.io/ecs"
@@ -7,6 +7,5 @@ import (
 
 type entity struct {
 	*ecs.BasicEntity
-	*common.MouseComponent
-	*common.AudioComponent
+	*common.RenderComponent
 }

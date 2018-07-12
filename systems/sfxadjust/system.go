@@ -1,4 +1,4 @@
-package soundadjust
+package sfxadjust
 
 import (
 	"engo.io/ecs"
@@ -16,12 +16,12 @@ type System struct {
 }
 
 func (s *System) New(w *ecs.World) {
-	s.current = options.TheOptions.BGMLevel
-	s.to = options.TheOptions.BGMLevel
-	s.curcb = options.TheOptions.BGM
+	s.current = options.TheOptions.SFXLevel
+	s.to = options.TheOptions.SFXLevel
+	s.curcb = options.TheOptions.SFX
 
-	engo.Mailbox.Listen(messages.MusicType, func(m engo.Message) {
-		msg, ok := m.(messages.Music)
+	engo.Mailbox.Listen(messages.SFXType, func(m engo.Message) {
+		msg, ok := m.(messages.SFX)
 		if !ok {
 			return
 		}
@@ -42,21 +42,13 @@ func (s *System) Remove(basic ecs.BasicEntity) {}
 func (s *System) Update(float32) {
 	if s.cb {
 		s.curcb = !s.curcb
-		options.TheOptions.SetBGM(s.curcb)
-		if s.curcb {
-			s.e.AudioComponent.Player.Play()
-		} else {
-			s.e.AudioComponent.Player.Pause()
-		}
+		options.TheOptions.SetSFX(s.curcb)
 		s.cb = false
 	}
 	if s.current != s.to {
 		if s.to <= 0 {
 			s.to = 0.01
 			s.current = 0.01
-			options.TheOptions.SetBGMLevel(s.current)
-			s.e.AudioComponent.Player.Pause()
-			return
 		}
 		if s.to >= 1 {
 			s.to = 0.99
@@ -64,6 +56,6 @@ func (s *System) Update(float32) {
 		}
 		s.e.AudioComponent.Player.SetVolume(s.to)
 		s.current = s.to
-		options.TheOptions.SetBGMLevel(s.current)
+		options.TheOptions.SetSFXLevel(s.current)
 	}
 }

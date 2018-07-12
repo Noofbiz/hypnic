@@ -6,13 +6,11 @@ import (
 	"engo.io/engo/common"
 
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 // System is the life system
 type System struct {
-	SFX    bool
-	SFXLvl float64
-
 	health  entity
 	changed bool
 	elapsed float32
@@ -47,7 +45,7 @@ func (s *System) New(w *ecs.World) {
 	s.health = entity{&b.BasicEntity, &b.RenderComponent, &b.SpaceComponent, &b.Component}
 
 	hitp, _ := common.LoadedPlayer("hit.wav")
-	hitp.SetVolume(s.SFXLvl)
+	hitp.SetVolume(options.TheOptions.SFXLevel)
 	hit := struct {
 		ecs.BasicEntity
 		common.AudioComponent
@@ -68,7 +66,7 @@ func (s *System) New(w *ecs.World) {
 		if s.elapsed <= 0 {
 			s.changed = true
 			s.health.Component.Health += msg.Amount
-			if s.SFX {
+			if options.TheOptions.SFX {
 				hitp.Rewind()
 				hitp.Play()
 			}

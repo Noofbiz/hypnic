@@ -7,14 +7,12 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/creditroll"
 	"github.com/Noofbiz/hypnic/systems/endcredits"
 )
 
 type Scene struct {
-	BGM      bool
-	BGMLevel float64
-
 	fnt, dfnt *common.Font
 	curPos    float32
 	w         *ecs.World
@@ -67,13 +65,13 @@ func (s *Scene) Setup(u engo.Updater) {
 
 	// background music
 	bgmp, _ := common.LoadedPlayer("bgm.mp3")
-	bgmp.SetVolume(s.BGMLevel)
+	bgmp.SetVolume(options.TheOptions.BGMLevel)
 	b := bgm{BasicEntity: ecs.NewBasic()}
 	b.AudioComponent = common.AudioComponent{
 		Player: bgmp,
 	}
-	if s.BGM {
-		b.AudioComponent.Player.Repeat = true
+	b.AudioComponent.Player.Repeat = true
+	if options.TheOptions.BGM {
 		b.AudioComponent.Player.Play()
 	}
 	s.w.AddEntity(&b)
@@ -155,9 +153,11 @@ func (s *Scene) Setup(u engo.Updater) {
 	// statue fire
 	s.createLines("Statue Fire", "dklon", "opengameart.org/users/dklon")
 
+	// button press
+	s.createLines("Button Press", "copyc4t", "opengameart.org/users/copyc4t")
+
 	// font
 	s.createLines("fonts")
-
 	// kenpixel
 	s.createLines("Square Pixel", "Kenney", "kenney.nl")
 
@@ -187,6 +187,7 @@ func (s *Scene) createLines(lines ...string) {
 				Y: 0.5,
 			}
 		}
+		l.RenderComponent.SetZIndex(2)
 		l.SpaceComponent.Width = l.RenderComponent.Drawable.Width() * l.RenderComponent.Scale.X
 		l.SpaceComponent.Height = l.RenderComponent.Drawable.Height() * l.RenderComponent.Scale.Y
 		l.SpaceComponent.SetCenter(engo.Point{

@@ -1,6 +1,8 @@
 package musictext
 
 import (
+	"image/color"
+	"math"
 	"strconv"
 
 	"engo.io/ecs"
@@ -8,6 +10,7 @@ import (
 	"engo.io/engo/common"
 
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 type System struct {
@@ -20,7 +23,7 @@ type System struct {
 }
 
 func (s *System) New(w *ecs.World) {
-	s.text = 10
+	s.text = int(math.Round(options.TheOptions.BGMLevel * 10))
 
 	engo.Mailbox.Listen(messages.MusicLabelType, func(m engo.Message) {
 		msg, ok := m.(messages.MusicLabel)
@@ -34,10 +37,16 @@ func (s *System) New(w *ecs.World) {
 			s.text--
 		}
 	})
+
+	s.fnt = &common.Font{
+		URL:  "Gaegu-Regular.ttf",
+		FG:   color.White,
+		Size: 32,
+	}
+	s.fnt.CreatePreloaded()
 }
 
 func (s *System) Add(basic *ecs.BasicEntity, space *common.SpaceComponent, render *common.RenderComponent) {
-	s.fnt = render.Drawable.(common.Text).Font
 	s.e = entity{basic, space, render}
 }
 

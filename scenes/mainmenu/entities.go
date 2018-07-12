@@ -22,6 +22,7 @@ type button struct {
 	common.SpaceComponent
 	common.RenderComponent
 	common.MouseComponent
+	common.AudioComponent
 }
 
 type bgm struct {
