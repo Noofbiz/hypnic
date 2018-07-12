@@ -293,7 +293,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 220,
 	}
 	w.AddEntity(&mcl)
-	mtxt.Add(&mcl.BasicEntity, &mcl.RenderComponent)
+	mtxt.Add(&mcl.BasicEntity, &mcl.SpaceComponent, &mcl.RenderComponent)
 
 	// Music down
 	mds, _ := common.LoadedSprite("lower.png")
@@ -375,7 +375,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 320,
 	}
 	w.AddEntity(&scl)
-	sfxt.Add(&scl.BasicEntity, &scl.RenderComponent)
+	sfxt.Add(&scl.BasicEntity, &scl.SpaceComponent, &scl.RenderComponent)
 
 	// SFX down
 	sd := button{BasicEntity: ecs.NewBasic()}

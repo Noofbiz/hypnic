@@ -7,5 +7,6 @@ import (
 
 type entity struct {
 	*ecs.BasicEntity
+	*common.SpaceComponent
 	*common.RenderComponent
 }
