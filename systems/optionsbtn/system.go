@@ -1,4 +1,4 @@
-package creditsbtn
+package optionsbtn
 
 import (
 	"engo.io/ecs"
@@ -24,7 +24,6 @@ func (s *System) Update(float32) {
 			s.e.AudioComponent.Player.Rewind()
 			s.e.AudioComponent.Player.Play()
 		}
-		options.SaveOptions()
-		engo.SetSceneByName("CreditsScene", true)
+		engo.SetSceneByName("OptionsScene", true)
 	}
 }

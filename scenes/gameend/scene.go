@@ -181,7 +181,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		options.TheOptions.SetHighScore(s.Score)
 		options.SaveOptions()
 	} else {
-		hst := "High Score: " + strconv.Itoa(options.TheOptions.HighScore)
+		hst := "High Score\n" + strconv.Itoa(options.TheOptions.HighScore)
 		hs := sprite{BasicEntity: ecs.NewBasic()}
 		hs.RenderComponent.Drawable = common.Text{
 			Font: bfnt,
@@ -190,7 +190,7 @@ func (s *Scene) Setup(u engo.Updater) {
 		hs.RenderComponent.SetZIndex(2)
 		hs.SpaceComponent.Position = engo.Point{
 			X: 30,
-			Y: 370,
+			Y: 320,
 		}
 		w.AddEntity(&hs)
 	}

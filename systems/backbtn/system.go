@@ -1,4 +1,4 @@
-package creditsbtn
+package backbtn
 
 import (
 	"engo.io/ecs"
@@ -25,6 +25,6 @@ func (s *System) Update(float32) {
 			s.e.AudioComponent.Player.Play()
 		}
 		options.SaveOptions()
-		engo.SetSceneByName("CreditsScene", true)
+		engo.SetSceneByName("MainMenuScene", true)
 	}
 }

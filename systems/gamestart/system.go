@@ -6,7 +6,6 @@ import (
 	"engo.io/engo/common"
 
 	"github.com/Noofbiz/hypnic/options"
-	"github.com/Noofbiz/hypnic/scenes/game"
 )
 
 type System struct {
@@ -26,6 +25,6 @@ func (s *System) Update(float32) {
 			s.e.AudioComponent.Player.Play()
 		}
 		options.SaveOptions()
-		engo.SetScene(&game.Scene{}, true)
+		engo.SetSceneByName("GameScene", true)
 	}
 }

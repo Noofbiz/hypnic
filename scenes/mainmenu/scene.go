@@ -2,8 +2,6 @@ package mainmenu
 
 import (
 	"image/color"
-	"math"
-	"strconv"
 
 	"engo.io/ecs"
 	"engo.io/engo"
@@ -12,16 +10,7 @@ import (
 	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/creditsbtn"
 	"github.com/Noofbiz/hypnic/systems/gamestart"
-	"github.com/Noofbiz/hypnic/systems/musicbx"
-	"github.com/Noofbiz/hypnic/systems/musicdown"
-	"github.com/Noofbiz/hypnic/systems/musictext"
-	"github.com/Noofbiz/hypnic/systems/musicup"
-	"github.com/Noofbiz/hypnic/systems/sfxadjust"
-	"github.com/Noofbiz/hypnic/systems/sfxbx"
-	"github.com/Noofbiz/hypnic/systems/sfxdown"
-	"github.com/Noofbiz/hypnic/systems/sfxtext"
-	"github.com/Noofbiz/hypnic/systems/sfxup"
-	"github.com/Noofbiz/hypnic/systems/soundadjust"
+	"github.com/Noofbiz/hypnic/systems/optionsbtn"
 )
 
 type Scene struct{}
@@ -39,9 +28,6 @@ func (s *Scene) Preload() {
 func (s *Scene) Setup(u engo.Updater) {
 	w, _ := u.(*ecs.World)
 	common.SetBackground(color.Black)
-
-	// register main menu scene
-	engo.RegisterScene(&Scene{})
 
 	// Add Render System
 	// To be added to the render system needs
@@ -66,49 +52,13 @@ func (s *Scene) Setup(u engo.Updater) {
 	start := &gamestart.System{}
 	w.AddSystem(start)
 
-	// add music down system
-	mdown := &musicdown.System{}
-	w.AddSystem(mdown)
-
-	// add music up system
-	mup := &musicup.System{}
-	w.AddSystem(mup)
-
-	// add music text system
-	mtxt := &musictext.System{}
-	w.AddSystem(mtxt)
-
-	// add music checkbox system
-	mcbx := &musicbx.System{}
-	w.AddSystem(mcbx)
-
-	// add sound adjusting systme
-	sadj := &soundadjust.System{}
-	w.AddSystem(sadj)
-
-	// add sfx adjusting system
-	sfxadj := &sfxadjust.System{}
-	w.AddSystem(sfxadj)
+	// add options button system
+	opts := &optionsbtn.System{}
+	w.AddSystem(opts)
 
 	// add credits system
 	crds := &creditsbtn.System{}
 	w.AddSystem(crds)
-
-	// add sfx checkbox system
-	scbx := &sfxbx.System{}
-	w.AddSystem(scbx)
-
-	// add sfx down system
-	sfxd := &sfxdown.System{}
-	w.AddSystem(sfxd)
-
-	// add sfx up system
-	sfxu := &sfxup.System{}
-	w.AddSystem(sfxu)
-
-	// add sfx text system
-	sfxt := &sfxtext.System{}
-	w.AddSystem(sfxt)
 
 	//add background
 	bgs, _ := common.LoadedSprite("bg.png")
@@ -137,7 +87,6 @@ func (s *Scene) Setup(u engo.Updater) {
 		b.AudioComponent.Player.Play()
 	}
 	w.AddEntity(&b)
-	sadj.Add(&b.BasicEntity, &b.AudioComponent)
 
 	// Title label
 	tfnt := &common.Font{
@@ -206,7 +155,6 @@ func (s *Scene) Setup(u engo.Updater) {
 	sg.AudioComponent.Player = msfx
 	w.AddEntity(&sg)
 	start.Add(&sg.BasicEntity, &sg.MouseComponent, &sg.AudioComponent)
-	sfxadj.Add(&sg.BasicEntity, &sg.AudioComponent)
 
 	// Start game text
 	sgt := label{BasicEntity: ecs.NewBasic()}
@@ -220,6 +168,33 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 120,
 	}
 	w.AddEntity(&sgt)
+
+	// Options button
+	op := button{BasicEntity: ecs.NewBasic()}
+	op.RenderComponent.Drawable = sgs
+	op.RenderComponent.SetZIndex(2)
+	op.SpaceComponent.Position = engo.Point{
+		X: 20,
+		Y: 180,
+	}
+	op.SpaceComponent.Width = op.RenderComponent.Drawable.Width()
+	op.SpaceComponent.Height = op.RenderComponent.Drawable.Height()
+	op.AudioComponent.Player = msfx
+	w.AddEntity(&op)
+	opts.Add(&op.BasicEntity, &op.MouseComponent, &op.AudioComponent)
+
+	// Options text
+	opt := label{BasicEntity: ecs.NewBasic()}
+	opt.RenderComponent.Drawable = common.Text{
+		Font: tfnt,
+		Text: "Options",
+	}
+	opt.RenderComponent.SetZIndex(3)
+	opt.SpaceComponent.Position = engo.Point{
+		X: 120,
+		Y: 200,
+	}
+	w.AddEntity(&opt)
 
 	// Credits
 	c := button{BasicEntity: ecs.NewBasic()}
@@ -247,203 +222,4 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 400,
 	}
 	w.AddEntity(&ct)
-
-	// Music label
-	bfnt := &common.Font{
-		URL:  "Gaegu-Regular.ttf",
-		FG:   color.Black,
-		Size: 32,
-	}
-	bfnt.CreatePreloaded()
-	ml := label{BasicEntity: ecs.NewBasic()}
-	ml.RenderComponent.Drawable = common.Text{
-		Font: bfnt,
-		Text: "Music",
-	}
-	ml.RenderComponent.SetZIndex(2)
-	ml.SpaceComponent.Position = engo.Point{
-		X: 60,
-		Y: 180,
-	}
-	w.AddEntity(&ml)
-
-	// Music Checkbox
-	mcbs, _ := common.LoadedSprite("checked.png")
-	mcbsu, _ := common.LoadedSprite("unchecked.png")
-	mcb := button{BasicEntity: ecs.NewBasic()}
-	if options.TheOptions.BGM {
-		mcb.RenderComponent.Drawable = mcbs
-	} else {
-		mcb.RenderComponent.Drawable = mcbsu
-	}
-	mcb.RenderComponent.SetZIndex(3)
-	mcb.SpaceComponent.Position = engo.Point{
-		X: 135,
-		Y: 185,
-	}
-	mcb.SpaceComponent.Width = mcb.RenderComponent.Drawable.Width()
-	mcb.SpaceComponent.Height = mcb.RenderComponent.Drawable.Height()
-	mcb.AudioComponent.Player = msfx
-	w.AddEntity(&mcb)
-	mcbx.Add(&mcb.BasicEntity, &mcb.MouseComponent, &mcb.RenderComponent, &mcb.AudioComponent)
-
-	// Music control bg
-	mcbgs, _ := common.LoadedSprite("sound.png")
-	mcbg := label{BasicEntity: ecs.NewBasic()}
-	mcbg.RenderComponent.Drawable = mcbgs
-	mcbg.RenderComponent.SetZIndex(2)
-	mcbg.RenderComponent.Scale = engo.Point{
-		X: 0.8,
-		Y: 0.8,
-	}
-	mcbg.SpaceComponent.Position = engo.Point{
-		X: 40,
-		Y: 210,
-	}
-	w.AddEntity(&mcbg)
-
-	// Music control label
-	mcl := label{BasicEntity: ecs.NewBasic()}
-	mci := int(math.Round(options.TheOptions.BGMLevel * 10))
-	mcl.RenderComponent.SetZIndex(3)
-	mcl.SpaceComponent.Position = engo.Point{
-		X: 150,
-		Y: 220,
-	}
-	if mci == 2 {
-		mcl.RenderComponent.Drawable = tfnt.Render("2")
-		mcl.SpaceComponent.Position.Y += 5
-	} else {
-		mclt := strconv.Itoa(mci)
-		mcl.RenderComponent.Drawable = common.Text{
-			Font: tfnt,
-			Text: mclt,
-		}
-	}
-	w.AddEntity(&mcl)
-	mtxt.Add(&mcl.BasicEntity, &mcl.SpaceComponent, &mcl.RenderComponent)
-
-	// Music down
-	mds, _ := common.LoadedSprite("lower.png")
-	md := button{BasicEntity: ecs.NewBasic()}
-	md.RenderComponent.Drawable = mds
-	md.RenderComponent.SetZIndex(3)
-	md.SpaceComponent.Position = engo.Point{
-		X: 36,
-		Y: 219,
-	}
-	md.SpaceComponent.Width = md.RenderComponent.Drawable.Width()
-	md.SpaceComponent.Height = md.RenderComponent.Drawable.Height()
-	md.AudioComponent.Player = msfx
-	w.AddEntity(&md)
-	mdown.Add(&md.BasicEntity, &md.MouseComponent, &md.AudioComponent)
-
-	// Music raise
-	mrs, _ := common.LoadedSprite("raise.png")
-	mr := button{BasicEntity: ecs.NewBasic()}
-	mr.RenderComponent.Drawable = mrs
-	mr.RenderComponent.SetZIndex(3)
-	mr.SpaceComponent.Position = engo.Point{
-		X: 238,
-		Y: 219,
-	}
-	mr.SpaceComponent.Width = mr.RenderComponent.Drawable.Width()
-	mr.SpaceComponent.Height = mr.RenderComponent.Drawable.Height()
-	mr.AudioComponent.Player = msfx
-	w.AddEntity(&mr)
-	mup.Add(&mr.BasicEntity, &mr.MouseComponent, &mr.AudioComponent)
-
-	// SFX label]
-	sl := label{BasicEntity: ecs.NewBasic()}
-	sl.RenderComponent.Drawable = common.Text{
-		Font: bfnt,
-		Text: "SFX",
-	}
-	sl.RenderComponent.SetZIndex(2)
-	sl.SpaceComponent.Position = engo.Point{
-		X: 60,
-		Y: 280,
-	}
-	w.AddEntity(&sl)
-
-	// SFX Checkbox
-	scb := button{BasicEntity: ecs.NewBasic()}
-	if options.TheOptions.SFX {
-		scb.RenderComponent.Drawable = mcbs
-	} else {
-		scb.RenderComponent.Drawable = mcbsu
-	}
-	scb.RenderComponent.SetZIndex(3)
-	scb.SpaceComponent.Position = engo.Point{
-		X: 115,
-		Y: 285,
-	}
-	scb.SpaceComponent.Width = scb.RenderComponent.Drawable.Width()
-	scb.SpaceComponent.Height = scb.RenderComponent.Drawable.Height()
-	scb.AudioComponent.Player = msfx
-	w.AddEntity(&scb)
-	scbx.Add(&scb.BasicEntity, &scb.MouseComponent, &scb.RenderComponent, &scb.AudioComponent)
-
-	// SFX control bg
-	scbg := label{BasicEntity: ecs.NewBasic()}
-	scbg.RenderComponent.Drawable = mcbgs
-	scbg.RenderComponent.SetZIndex(2)
-	scbg.RenderComponent.Scale = engo.Point{
-		X: 0.8,
-		Y: 0.8,
-	}
-	scbg.SpaceComponent.Position = engo.Point{
-		X: 40,
-		Y: 310,
-	}
-	w.AddEntity(&scbg)
-
-	// SFX control label
-	scl := label{BasicEntity: ecs.NewBasic()}
-	scli := int(math.Round(options.TheOptions.SFXLevel * 10))
-	scl.RenderComponent.SetZIndex(3)
-	scl.SpaceComponent.Position = engo.Point{
-		X: 150,
-		Y: 320,
-	}
-	if scli == 2 {
-		scl.RenderComponent.Drawable = tfnt.Render("2")
-		scl.SpaceComponent.Position.Y += 5
-	} else {
-		sclt := strconv.Itoa(scli)
-		scl.RenderComponent.Drawable = common.Text{
-			Font: tfnt,
-			Text: sclt,
-		}
-	}
-	w.AddEntity(&scl)
-	sfxt.Add(&scl.BasicEntity, &scl.SpaceComponent, &scl.RenderComponent)
-
-	// SFX down
-	sd := button{BasicEntity: ecs.NewBasic()}
-	sd.RenderComponent.Drawable = mds
-	sd.RenderComponent.SetZIndex(3)
-	sd.SpaceComponent.Position = engo.Point{
-		X: 36,
-		Y: 319,
-	}
-	sd.SpaceComponent.Width = sd.RenderComponent.Drawable.Width()
-	sd.SpaceComponent.Height = sd.RenderComponent.Drawable.Height()
-	sd.AudioComponent.Player = msfx
-	w.AddEntity(&sd)
-	sfxd.Add(&sd.BasicEntity, &sd.MouseComponent, &sd.AudioComponent)
-
-	// SFX raise
-	sr := button{BasicEntity: ecs.NewBasic()}
-	sr.RenderComponent.Drawable = mrs
-	sr.RenderComponent.SetZIndex(3)
-	sr.SpaceComponent.Position = engo.Point{
-		X: 238,
-		Y: 319,
-	}
-	sr.SpaceComponent.Width = sr.RenderComponent.Drawable.Width()
-	sr.SpaceComponent.Height = sr.RenderComponent.Drawable.Height()
-	sr.AudioComponent.Player = msfx
-	w.AddEntity(&sr)
-	sfxu.Add(&sr.BasicEntity, &sr.MouseComponent, &sr.AudioComponent)
 }
