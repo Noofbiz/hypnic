@@ -11,6 +11,9 @@ import (
 
 	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/backbtn"
+	"github.com/Noofbiz/hypnic/systems/controldown"
+	"github.com/Noofbiz/hypnic/systems/controltext"
+	"github.com/Noofbiz/hypnic/systems/controlup"
 	"github.com/Noofbiz/hypnic/systems/musicbx"
 	"github.com/Noofbiz/hypnic/systems/musicdown"
 	"github.com/Noofbiz/hypnic/systems/musictext"
@@ -389,4 +392,76 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 125,
 	}
 	w.AddEntity(&bbt)
+
+	// Controls label
+	cl := label{BasicEntity: ecs.NewBasic()}
+	cl.RenderComponent.Drawable = common.Text{
+		Font: bfnt,
+		Text: "Controls",
+	}
+	cl.RenderComponent.SetZIndex(2)
+	cl.SpaceComponent.Position = engo.Point{
+		X: 60,
+		Y: 365,
+	}
+	w.AddEntity(&cl)
+
+	// controls control bg
+	ccbg := label{BasicEntity: ecs.NewBasic()}
+	ccbg.RenderComponent.Drawable = mcbgs
+	ccbg.RenderComponent.SetZIndex(2)
+	ccbg.RenderComponent.Scale = engo.Point{
+		X: 0.8,
+		Y: 0.8,
+	}
+	ccbg.SpaceComponent.Position = engo.Point{
+		X: 40,
+		Y: 390,
+	}
+	w.AddEntity(&ccbg)
+
+	// control control label
+	ctxt := &controltext.System{}
+	w.AddSystem(ctxt)
+	ccl := label{BasicEntity: ecs.NewBasic()}
+	ccl.RenderComponent.SetZIndex(3)
+	ccl.SpaceComponent.Position = engo.Point{
+		X: 105,
+		Y: 405,
+	}
+	ccl.RenderComponent.Drawable = tfnt.Render(options.TheOptions.Controls)
+	w.AddEntity(&ccl)
+	ctxt.Add(&ccl.BasicEntity, &ccl.SpaceComponent, &ccl.RenderComponent)
+
+	// controls down
+	cdown := &controldown.System{}
+	w.AddSystem(cdown)
+	cd := button{BasicEntity: ecs.NewBasic()}
+	cd.RenderComponent.Drawable = mds
+	cd.RenderComponent.SetZIndex(3)
+	cd.SpaceComponent.Position = engo.Point{
+		X: 36,
+		Y: 401,
+	}
+	cd.SpaceComponent.Width = cd.RenderComponent.Drawable.Width()
+	cd.SpaceComponent.Height = cd.RenderComponent.Drawable.Height()
+	cd.AudioComponent.Player = msfx
+	w.AddEntity(&cd)
+	cdown.Add(&cd.BasicEntity, &cd.MouseComponent)
+
+	// controls raise
+	craise := &controlup.System{}
+	w.AddSystem(craise)
+	cr := button{BasicEntity: ecs.NewBasic()}
+	cr.RenderComponent.Drawable = mrs
+	cr.RenderComponent.SetZIndex(3)
+	cr.SpaceComponent.Position = engo.Point{
+		X: 238,
+		Y: 399,
+	}
+	cr.SpaceComponent.Width = cr.RenderComponent.Drawable.Width()
+	cr.SpaceComponent.Height = cr.RenderComponent.Drawable.Height()
+	cr.AudioComponent.Player = msfx
+	w.AddEntity(&cr)
+	craise.Add(&cr.BasicEntity, &cr.MouseComponent)
 }

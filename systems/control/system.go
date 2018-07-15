@@ -6,6 +6,7 @@ import (
 	"engo.io/engo/common"
 
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 // System is the system for controlling the player
@@ -22,6 +23,7 @@ func (s *System) New(w *ecs.World) {
 		engo.AxisKeyPair{Min: engo.KeyArrowLeft, Max: engo.KeyArrowRight},
 		engo.AxisKeyPair{Min: engo.KeyA, Max: engo.KeyD},
 	)
+	engo.Input.RegisterAxis(engo.DefaultMouseXAxis, engo.NewAxisMouse(engo.AxisMouseHori))
 	s.speed = 3
 
 	engo.Mailbox.Listen(messages.SendPlayerPositionType, func(m engo.Message) {
@@ -52,7 +54,7 @@ func (s *System) Remove(basic ecs.BasicEntity) {}
 // Update is called once per frame
 func (s *System) Update(dt float32) {
 	s.player.Position.Add(engo.Point{
-		X: s.speed * engo.Input.Axis("movement").Value(),
+		X: s.speed * controlValue(),
 		Y: 0,
 	})
 	if s.player.Position.X < 31 {
@@ -66,5 +68,16 @@ func (s *System) Update(dt float32) {
 			Amount: -5,
 		})
 		s.player.Position.X = engo.GameWidth() - 65
+	}
+}
+
+func controlValue() float32 {
+	switch options.TheOptions.Controls {
+	case "Acceler":
+		return engo.Input.Axis("movement").Value()
+	case "Touch":
+		return engo.Input.Axis(engo.DefaultMouseXAxis).Value()
+	default:
+		return engo.Input.Axis("movement").Value()
 	}
 }

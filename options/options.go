@@ -11,6 +11,11 @@ type Options struct {
 	BGM, SFX           bool
 	BGMLevel, SFXLevel float64
 	HighScore          int
+	Controls           string
+}
+
+func (o *Options) SetControls(s string) {
+	o.Controls = s
 }
 
 func (o *Options) SetHighScore(i int) {
@@ -75,6 +80,7 @@ func LoadOptions() error {
 			BGMLevel:  0.999999,
 			SFXLevel:  0.999999,
 			HighScore: 0,
+			Controls:  "Keyboard",
 		}
 		return nil
 	}
