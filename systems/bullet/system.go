@@ -106,10 +106,11 @@ func (s *System) Update(dt float32) {
 			X: s.speed * sin,
 			Y: s.speed * cos,
 		})
-		if s.entities[i].Position.X < 31 || s.entities[i].Position.X > engo.GameWidth()-64 {
+		if s.entities[i].Position.X < 31+options.XOffset ||
+			s.entities[i].Position.X > 256+options.XOffset {
 			s.entities[i].Angle *= -1
 		}
-		if s.entities[i].Position.Y < 0 {
+		if s.entities[i].Position.Y < options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}

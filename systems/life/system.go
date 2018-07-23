@@ -23,9 +23,12 @@ func (s *System) New(w *ecs.World) {
 	empty.RenderComponent.Drawable = emptys
 	empty.RenderComponent.SetZIndex(10)
 	empty.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{X: 10, Y: 10},
-		Width:    empty.RenderComponent.Drawable.Width(),
-		Height:   empty.RenderComponent.Drawable.Height(),
+		Position: engo.Point{
+			X: 10 + options.XOffset,
+			Y: 10 + options.YOffset,
+		},
+		Width:  empty.RenderComponent.Drawable.Width(),
+		Height: empty.RenderComponent.Drawable.Height(),
 	}
 	w.AddEntity(&empty)
 
@@ -34,9 +37,12 @@ func (s *System) New(w *ecs.World) {
 	b.RenderComponent.Drawable = bs
 	b.RenderComponent.SetZIndex(11)
 	b.SpaceComponent = common.SpaceComponent{
-		Position: engo.Point{X: 10, Y: 10},
-		Width:    empty.RenderComponent.Drawable.Width(),
-		Height:   empty.RenderComponent.Drawable.Height(),
+		Position: engo.Point{
+			X: 10 + options.XOffset,
+			Y: 10 + options.YOffset,
+		},
+		Width:  empty.RenderComponent.Drawable.Width(),
+		Height: empty.RenderComponent.Drawable.Height(),
 	}
 	b.Component.Health = 100
 	b.Component.Max = 100

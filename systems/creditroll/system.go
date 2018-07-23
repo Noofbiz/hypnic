@@ -4,6 +4,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 // System is the bullet system
@@ -44,7 +45,7 @@ func (s *System) Update(dt float32) {
 			X: 0,
 			Y: s.speed * dt,
 		})
-		if s.entities[i].Position.Y < -50 {
+		if s.entities[i].Position.Y < -50+options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}

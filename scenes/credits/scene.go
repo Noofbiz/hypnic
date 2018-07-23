@@ -1,12 +1,15 @@
 package credits
 
 import (
+	"bytes"
 	"image/color"
+	"log"
 
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/assets"
 	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/creditroll"
 	"github.com/Noofbiz/hypnic/systems/endcredits"
@@ -23,7 +26,19 @@ func (s *Scene) Type() string {
 }
 
 func (s *Scene) Preload() {
-	engo.Files.Load("bg.png", "bgm.mp3", "Gaegu-Regular.ttf", "kenpixel_square.ttf")
+	filelist := []string{
+		"bg.png",
+		"bgm.mp3",
+		"Gaegu-Regular.ttf",
+		"kenpixel_square.ttf",
+	}
+	for _, url := range filelist {
+		d, err := assets.Asset(url)
+		if err != nil {
+			log.Println("Couldn't load " + url)
+		}
+		engo.Files.LoadReaderData(url, bytes.NewReader(d))
+	}
 }
 
 func (s *Scene) Setup(u engo.Updater) {
@@ -53,9 +68,12 @@ func (s *Scene) Setup(u engo.Updater) {
 	bg := sprite{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
-			Position: engo.Point{X: 0, Y: 0},
-			Width:    320,
-			Height:   480,
+			Position: engo.Point{
+				X: 0 + options.XOffset,
+				Y: 0 + options.YOffset,
+			},
+			Width:  320,
+			Height: 480,
 		},
 		RenderComponent: common.RenderComponent{
 			Drawable: bgs,
@@ -76,7 +94,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	s.w.AddEntity(&b)
 
-	s.curPos = 2 * engo.GameHeight() / 3
+	s.curPos = 320 + options.YOffset
 
 	//up font
 	s.fnt = &common.Font{
@@ -190,10 +208,10 @@ func (s *Scene) createLines(lines ...string) {
 		l.RenderComponent.SetZIndex(2)
 		l.SpaceComponent.Width = l.RenderComponent.Drawable.Width() * l.RenderComponent.Scale.X
 		l.SpaceComponent.Height = l.RenderComponent.Drawable.Height() * l.RenderComponent.Scale.Y
-		l.SpaceComponent.SetCenter(engo.Point{
-			X: engo.GameWidth() / 2,
+		l.SpaceComponent.Position = engo.Point{
+			X: (320-l.SpaceComponent.Width)/2 + ((320 - engo.WindowWidth()) / (2 * engo.GetGlobalScale().X)),
 			Y: s.curPos,
-		})
+		}
 		s.w.AddEntity(&l)
 		s.curPos += 28
 	}

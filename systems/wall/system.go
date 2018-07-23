@@ -6,6 +6,7 @@ import (
 	"engo.io/ecs"
 	"engo.io/engo"
 	"engo.io/engo/common"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 // System moves the wall tiles to look like falling
@@ -18,7 +19,7 @@ type System struct {
 // New adds the walls to the scene
 func (s *System) New(w *ecs.World) {
 	s.speed = 30
-	s.bottom = 640
+	s.bottom = 640 + options.YOffset
 }
 
 // Add adds an entity to the system

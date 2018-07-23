@@ -9,6 +9,7 @@ import (
 	"engo.io/engo/math"
 
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 // System is a system for the gargoyles
@@ -114,7 +115,7 @@ func (s *System) Update(dt float32) {
 			s.entities[i].elapsed = 0
 			s.entities[i].charges--
 		}
-		if s.entities[i].Position.Y < -66 {
+		if s.entities[i].Position.Y < -66+options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}
@@ -127,8 +128,8 @@ func (s *System) addGargoyle() {
 	g.RenderComponent.SetZIndex(1)
 	g.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{
-			X: rand.Float32()*(engo.GameWidth()-64-g.RenderComponent.Drawable.Width()) + 32,
-			Y: engo.GameHeight(),
+			X: rand.Float32()*(256-g.RenderComponent.Drawable.Width()) + 32 + options.XOffset,
+			Y: 480 + options.YOffset,
 		},
 		Width:  g.RenderComponent.Drawable.Width(),
 		Height: g.RenderComponent.Drawable.Height(),

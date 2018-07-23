@@ -9,6 +9,7 @@ import (
 	"engo.io/engo/common"
 
 	"github.com/Noofbiz/hypnic/messages"
+	"github.com/Noofbiz/hypnic/options"
 )
 
 type System struct {
@@ -38,8 +39,8 @@ func (s *System) New(w *ecs.World) {
 	t.RenderComponent.SetZIndex(11)
 	t.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{
-			X: engo.GameWidth() - 120,
-			Y: 5,
+			X: 200 + options.XOffset,
+			Y: 5 + options.YOffset,
 		},
 	}
 	w.AddEntity(&t)

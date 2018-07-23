@@ -5,6 +5,7 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/controllers"
 	"github.com/Noofbiz/hypnic/messages"
 	"github.com/Noofbiz/hypnic/options"
 )
@@ -57,24 +58,24 @@ func (s *System) Update(dt float32) {
 		X: s.speed * controlValue(),
 		Y: 0,
 	})
-	if s.player.Position.X < 31 {
+	if s.player.Position.X < 31+options.XOffset {
 		engo.Mailbox.Dispatch(messages.Damage{
 			Amount: -5,
 		})
-		s.player.Position.X = 32
+		s.player.Position.X = 32 + options.XOffset
 	}
-	if s.player.Position.X > engo.GameWidth()-64 {
+	if s.player.Position.X > 256+options.XOffset {
 		engo.Mailbox.Dispatch(messages.Damage{
 			Amount: -5,
 		})
-		s.player.Position.X = engo.GameWidth() - 65
+		s.player.Position.X = 255 + options.XOffset
 	}
 }
 
 func controlValue() float32 {
 	switch options.TheOptions.Controls {
 	case "Acceler":
-		return engo.Input.Axis("movement").Value()
+		return controllers.GetAccelerometerValue()
 	case "Touch":
 		return engo.Input.Axis(engo.DefaultMouseXAxis).Value()
 	default:

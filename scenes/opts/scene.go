@@ -1,7 +1,9 @@
 package opts
 
 import (
+	"bytes"
 	"image/color"
+	"log"
 	"math"
 	"strconv"
 
@@ -9,6 +11,7 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/assets"
 	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/backbtn"
 	"github.com/Noofbiz/hypnic/systems/controldown"
@@ -33,9 +36,16 @@ func (s *Scene) Type() string {
 }
 
 func (s *Scene) Preload() {
-	engo.Files.Load("menu.mp3", "bg.png", "Gaegu-Regular.ttf",
+	filelist := []string{"menu.mp3", "bg.png", "Gaegu-Regular.ttf",
 		"scroll.png", "button.png", "checked.png", "unchecked.png",
-		"raise.png", "lower.png", "sound.png", "sfx.wav")
+		"raise.png", "lower.png", "sound.png", "sfx.wav"}
+	for _, url := range filelist {
+		d, err := assets.Asset(url)
+		if err != nil {
+			log.Println("Couldn't load " + url)
+		}
+		engo.Files.LoadReaderData(url, bytes.NewReader(d))
+	}
 }
 
 func (s *Scene) Setup(u engo.Updater) {
@@ -110,7 +120,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	bg := background{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
-			Position: engo.Point{X: 0, Y: 0},
+			Position: engo.Point{X: options.XOffset, Y: options.YOffset},
 			Width:    320,
 			Height:   480,
 		},
@@ -148,8 +158,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	t.RenderComponent.SetZIndex(1)
 	t.SpaceComponent.Position = engo.Point{
-		X: 120,
-		Y: 20,
+		X: 120 + options.XOffset,
+		Y: 20 + options.YOffset,
 	}
 	w.AddEntity(&t)
 
@@ -159,8 +169,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	p.RenderComponent.Drawable = ps
 	p.RenderComponent.SetZIndex(1)
 	p.SpaceComponent.Position = engo.Point{
-		X: 10,
-		Y: 80,
+		X: 10 + options.XOffset,
+		Y: 80 + options.YOffset,
 	}
 	w.AddEntity(&p)
 
@@ -183,8 +193,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	ml.RenderComponent.SetZIndex(2)
 	ml.SpaceComponent.Position = engo.Point{
-		X: 60,
-		Y: 180,
+		X: 60 + options.XOffset,
+		Y: 180 + options.YOffset,
 	}
 	w.AddEntity(&ml)
 
@@ -199,8 +209,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	mcb.RenderComponent.SetZIndex(3)
 	mcb.SpaceComponent.Position = engo.Point{
-		X: 135,
-		Y: 185,
+		X: 135 + options.XOffset,
+		Y: 185 + options.YOffset,
 	}
 	mcb.SpaceComponent.Width = mcb.RenderComponent.Drawable.Width()
 	mcb.SpaceComponent.Height = mcb.RenderComponent.Drawable.Height()
@@ -218,8 +228,8 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 0.8,
 	}
 	mcbg.SpaceComponent.Position = engo.Point{
-		X: 40,
-		Y: 210,
+		X: 40 + options.XOffset,
+		Y: 210 + options.YOffset,
 	}
 	w.AddEntity(&mcbg)
 
@@ -228,8 +238,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	mci := int(math.Round(options.TheOptions.BGMLevel * 10))
 	mcl.RenderComponent.SetZIndex(3)
 	mcl.SpaceComponent.Position = engo.Point{
-		X: 150,
-		Y: 220,
+		X: 150 + options.XOffset,
+		Y: 220 + options.YOffset,
 	}
 	if mci == 2 {
 		mcl.RenderComponent.Drawable = tfnt.Render("2")
@@ -250,8 +260,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	md.RenderComponent.Drawable = mds
 	md.RenderComponent.SetZIndex(3)
 	md.SpaceComponent.Position = engo.Point{
-		X: 36,
-		Y: 219,
+		X: 36 + options.XOffset,
+		Y: 219 + options.YOffset,
 	}
 	md.SpaceComponent.Width = md.RenderComponent.Drawable.Width()
 	md.SpaceComponent.Height = md.RenderComponent.Drawable.Height()
@@ -265,8 +275,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	mr.RenderComponent.Drawable = mrs
 	mr.RenderComponent.SetZIndex(3)
 	mr.SpaceComponent.Position = engo.Point{
-		X: 238,
-		Y: 219,
+		X: 238 + options.XOffset,
+		Y: 219 + options.YOffset,
 	}
 	mr.SpaceComponent.Width = mr.RenderComponent.Drawable.Width()
 	mr.SpaceComponent.Height = mr.RenderComponent.Drawable.Height()
@@ -282,8 +292,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	sl.RenderComponent.SetZIndex(2)
 	sl.SpaceComponent.Position = engo.Point{
-		X: 60,
-		Y: 280,
+		X: 60 + options.XOffset,
+		Y: 280 + options.YOffset,
 	}
 	w.AddEntity(&sl)
 
@@ -296,8 +306,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	scb.RenderComponent.SetZIndex(3)
 	scb.SpaceComponent.Position = engo.Point{
-		X: 115,
-		Y: 285,
+		X: 115 + options.XOffset,
+		Y: 285 + options.YOffset,
 	}
 	scb.SpaceComponent.Width = scb.RenderComponent.Drawable.Width()
 	scb.SpaceComponent.Height = scb.RenderComponent.Drawable.Height()
@@ -314,8 +324,8 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 0.8,
 	}
 	scbg.SpaceComponent.Position = engo.Point{
-		X: 40,
-		Y: 310,
+		X: 40 + options.XOffset,
+		Y: 310 + options.YOffset,
 	}
 	w.AddEntity(&scbg)
 
@@ -324,8 +334,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	scli := int(math.Round(options.TheOptions.SFXLevel * 10))
 	scl.RenderComponent.SetZIndex(3)
 	scl.SpaceComponent.Position = engo.Point{
-		X: 150,
-		Y: 320,
+		X: 150 + options.XOffset,
+		Y: 320 + options.YOffset,
 	}
 	if scli == 2 {
 		scl.RenderComponent.Drawable = tfnt.Render("2")
@@ -345,8 +355,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	sd.RenderComponent.Drawable = mds
 	sd.RenderComponent.SetZIndex(3)
 	sd.SpaceComponent.Position = engo.Point{
-		X: 36,
-		Y: 319,
+		X: 36 + options.XOffset,
+		Y: 319 + options.YOffset,
 	}
 	sd.SpaceComponent.Width = sd.RenderComponent.Drawable.Width()
 	sd.SpaceComponent.Height = sd.RenderComponent.Drawable.Height()
@@ -359,8 +369,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	sr.RenderComponent.Drawable = mrs
 	sr.RenderComponent.SetZIndex(3)
 	sr.SpaceComponent.Position = engo.Point{
-		X: 238,
-		Y: 319,
+		X: 238 + options.XOffset,
+		Y: 319 + options.YOffset,
 	}
 	sr.SpaceComponent.Width = sr.RenderComponent.Drawable.Width()
 	sr.SpaceComponent.Height = sr.RenderComponent.Drawable.Height()
@@ -373,8 +383,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	bb.RenderComponent.Drawable = sgs
 	bb.RenderComponent.SetZIndex(2)
 	bb.SpaceComponent.Position = engo.Point{
-		X: 20,
-		Y: 100,
+		X: 20 + options.XOffset,
+		Y: 100 + options.YOffset,
 	}
 	bb.SpaceComponent.Width = bb.RenderComponent.Drawable.Width()
 	bb.SpaceComponent.Height = bb.RenderComponent.Drawable.Height()
@@ -388,8 +398,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	bbt.RenderComponent.Drawable = tfnt.Render("Back")
 	bbt.RenderComponent.SetZIndex(3)
 	bbt.SpaceComponent.Position = engo.Point{
-		X: 130,
-		Y: 125,
+		X: 130 + options.XOffset,
+		Y: 125 + options.YOffset,
 	}
 	w.AddEntity(&bbt)
 
@@ -401,8 +411,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	cl.RenderComponent.SetZIndex(2)
 	cl.SpaceComponent.Position = engo.Point{
-		X: 60,
-		Y: 365,
+		X: 60 + options.XOffset,
+		Y: 365 + options.YOffset,
 	}
 	w.AddEntity(&cl)
 
@@ -415,8 +425,8 @@ func (s *Scene) Setup(u engo.Updater) {
 		Y: 0.8,
 	}
 	ccbg.SpaceComponent.Position = engo.Point{
-		X: 40,
-		Y: 390,
+		X: 40 + options.XOffset,
+		Y: 390 + options.YOffset,
 	}
 	w.AddEntity(&ccbg)
 
@@ -426,8 +436,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	ccl := label{BasicEntity: ecs.NewBasic()}
 	ccl.RenderComponent.SetZIndex(3)
 	ccl.SpaceComponent.Position = engo.Point{
-		X: 105,
-		Y: 405,
+		X: 105 + options.XOffset,
+		Y: 405 + options.YOffset,
 	}
 	ccl.RenderComponent.Drawable = tfnt.Render(options.TheOptions.Controls)
 	w.AddEntity(&ccl)
@@ -440,8 +450,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	cd.RenderComponent.Drawable = mds
 	cd.RenderComponent.SetZIndex(3)
 	cd.SpaceComponent.Position = engo.Point{
-		X: 36,
-		Y: 401,
+		X: 36 + options.XOffset,
+		Y: 401 + options.YOffset,
 	}
 	cd.SpaceComponent.Width = cd.RenderComponent.Drawable.Width()
 	cd.SpaceComponent.Height = cd.RenderComponent.Drawable.Height()
@@ -456,8 +466,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	cr.RenderComponent.Drawable = mrs
 	cr.RenderComponent.SetZIndex(3)
 	cr.SpaceComponent.Position = engo.Point{
-		X: 238,
-		Y: 399,
+		X: 238 + options.XOffset,
+		Y: 399 + options.YOffset,
 	}
 	cr.SpaceComponent.Width = cr.RenderComponent.Drawable.Width()
 	cr.SpaceComponent.Height = cr.RenderComponent.Drawable.Height()

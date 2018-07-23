@@ -113,7 +113,7 @@ func (s *System) Update(dt float32) {
 	}
 	for i := 0; i < len(s.entities); i++ {
 		s.entities[i].Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
-		if s.entities[i].Position.Y < -32 {
+		if s.entities[i].Position.Y < -32+options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}
@@ -126,8 +126,8 @@ func (s *System) addPotion() {
 	p.RenderComponent.SetZIndex(2)
 	p.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{
-			X: rand.Float32()*(engo.GameWidth()-64-p.RenderComponent.Drawable.Width()) + 32,
-			Y: engo.GameHeight(),
+			X: rand.Float32()*(256-p.RenderComponent.Drawable.Width()) + 32 + options.XOffset,
+			Y: 480 + options.YOffset,
 		},
 		Width:  p.RenderComponent.Drawable.Width(),
 		Height: p.RenderComponent.Drawable.Height(),

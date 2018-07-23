@@ -1,7 +1,9 @@
 package game
 
 import (
+	"bytes"
 	"image/color"
+	"log"
 	"math/rand"
 	"time"
 
@@ -9,6 +11,7 @@ import (
 	"engo.io/engo"
 	"engo.io/engo/common"
 
+	"github.com/Noofbiz/hypnic/assets"
 	"github.com/Noofbiz/hypnic/collisions"
 	"github.com/Noofbiz/hypnic/options"
 	"github.com/Noofbiz/hypnic/systems/bullet"
@@ -34,10 +37,31 @@ func (s *Scene) Type() string {
 
 // Preload adds in everything the game scene needs to run
 func (s *Scene) Preload() {
-	engo.Files.Load("bg.png", "mininicular.png", "vignette.png", "player.png",
-		"gargoyle.png", "bullet.png", "health.png", "emptyHealth.png", "potion.png",
-		"kenpixel_square.ttf", "gem.png", "bgm.mp3", "potion.wav", "gem.wav",
-		"pew.wav", "hit.wav")
+	filelist := []string{
+		"bg.png",
+		"mininicular.png",
+		"vignette.png",
+		"player.png",
+		"gargoyle.png",
+		"bullet.png",
+		"health.png",
+		"emptyHealth.png",
+		"potion.png",
+		"kenpixel_square.ttf",
+		"gem.png",
+		"bgm.mp3",
+		"potion.wav",
+		"gem.wav",
+		"pew.wav",
+		"hit.wav",
+	}
+	for _, url := range filelist {
+		d, err := assets.Asset(url)
+		if err != nil {
+			log.Println("Couldn't load " + url)
+		}
+		engo.Files.LoadReaderData(url, bytes.NewReader(d))
+	}
 }
 
 // Setup adds everything to the game to get started
@@ -122,9 +146,12 @@ func (s *Scene) Setup(u engo.Updater) {
 	bg := background{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
-			Position: engo.Point{X: 0, Y: 0},
-			Width:    320,
-			Height:   480,
+			Position: engo.Point{
+				X: options.XOffset,
+				Y: options.YOffset,
+			},
+			Width:  320,
+			Height: 480,
 		},
 		RenderComponent: common.RenderComponent{
 			Drawable: bgs,
@@ -159,9 +186,12 @@ func (s *Scene) Setup(u engo.Updater) {
 			Scale:    engo.Point{X: 2, Y: 2},
 		}
 		l1.SpaceComponent = common.SpaceComponent{
-			Position: engo.Point{X: 0, Y: float32(32 * i)},
-			Width:    l1.Drawable.Width() * l1.Scale.X,
-			Height:   l1.Drawable.Height() * l1.Scale.Y,
+			Position: engo.Point{
+				X: options.XOffset,
+				Y: float32(32*i) + options.YOffset,
+			},
+			Width:  l1.Drawable.Width() * l1.Scale.X,
+			Height: l1.Drawable.Height() * l1.Scale.Y,
 		}
 		w.AddEntity(&l1)
 		if i < 5 {
@@ -171,9 +201,12 @@ func (s *Scene) Setup(u engo.Updater) {
 				Scale:    engo.Point{X: 2, Y: 2},
 			}
 			l2.SpaceComponent = common.SpaceComponent{
-				Position: engo.Point{X: 0, Y: float32(32*i) - engo.GameHeight()},
-				Width:    l2.Drawable.Width() * l2.Scale.X,
-				Height:   l2.Drawable.Height() * l2.Scale.Y,
+				Position: engo.Point{
+					X: options.XOffset,
+					Y: float32(32*i) - 480 + options.YOffset,
+				},
+				Width:  l2.Drawable.Width() * l2.Scale.X,
+				Height: l2.Drawable.Height() * l2.Scale.Y,
 			}
 			w.AddEntity(&l2)
 			l3 := wallTile{BasicEntity: ecs.NewBasic()}
@@ -182,9 +215,12 @@ func (s *Scene) Setup(u engo.Updater) {
 				Scale:    engo.Point{X: 2, Y: 2},
 			}
 			l3.SpaceComponent = common.SpaceComponent{
-				Position: engo.Point{X: 0, Y: float32(32*i) + engo.GameHeight()},
-				Width:    l3.Drawable.Width() * l3.Scale.X,
-				Height:   l3.Drawable.Height() * l3.Scale.X,
+				Position: engo.Point{
+					X: options.XOffset,
+					Y: float32(32*i) + 480 + options.YOffset,
+				},
+				Width:  l3.Drawable.Width() * l3.Scale.X,
+				Height: l3.Drawable.Height() * l3.Scale.X,
 			}
 			w.AddEntity(&l3)
 		}
@@ -196,8 +232,8 @@ func (s *Scene) Setup(u engo.Updater) {
 		}
 		r1.SpaceComponent = common.SpaceComponent{
 			Position: engo.Point{
-				X: engo.GameWidth() - (r1.Drawable.Width() * r1.Scale.X),
-				Y: float32(32 * i),
+				X: 320 - (r1.Drawable.Width() * r1.Scale.X) + options.XOffset,
+				Y: float32(32*i) + options.YOffset,
 			},
 			Width:  r1.Drawable.Width() * r1.Scale.X,
 			Height: r1.Drawable.Height() * r1.Scale.Y,
@@ -211,8 +247,8 @@ func (s *Scene) Setup(u engo.Updater) {
 			}
 			r2.SpaceComponent = common.SpaceComponent{
 				Position: engo.Point{
-					X: engo.GameWidth() - (r2.Drawable.Width() * r2.Scale.X),
-					Y: float32(32*i) - engo.GameHeight(),
+					X: 320 - (r2.Drawable.Width() * r2.Scale.X) + options.XOffset,
+					Y: float32(32*i) - 480 + options.YOffset,
 				},
 				Width:  r2.Drawable.Width() * r2.Scale.X,
 				Height: r2.Drawable.Height() * r2.Scale.Y,
@@ -225,8 +261,8 @@ func (s *Scene) Setup(u engo.Updater) {
 			}
 			r3.SpaceComponent = common.SpaceComponent{
 				Position: engo.Point{
-					X: engo.GameWidth() - (r2.Drawable.Width() * r2.Scale.X),
-					Y: float32(32*i) + engo.GameHeight(),
+					X: 320 - (r2.Drawable.Width() * r2.Scale.X) + options.XOffset,
+					Y: float32(32*i) + 480 + options.YOffset,
 				},
 				Width:  r3.Drawable.Width() * r3.Scale.X,
 				Height: r3.Drawable.Height() * r3.Scale.X,
@@ -240,7 +276,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	v := background{
 		BasicEntity: ecs.NewBasic(),
 		SpaceComponent: common.SpaceComponent{
-			Position: engo.Point{X: 0, Y: 0},
+			Position: engo.Point{X: options.XOffset, Y: options.YOffset},
 			Width:    320,
 			Height:   480,
 		},
@@ -260,10 +296,10 @@ func (s *Scene) Setup(u engo.Updater) {
 		Width:  p.RenderComponent.Drawable.Width(),
 		Height: p.RenderComponent.Drawable.Height(),
 	}
-	p.SpaceComponent.SetCenter(engo.Point{
-		X: engo.GameWidth() / 2,
-		Y: engo.GameHeight() / 4,
-	})
+	p.SpaceComponent.Position = engo.Point{
+		X: 142 + options.XOffset,
+		Y: 91 + options.YOffset,
+	}
 	p.CollisionComponent = common.CollisionComponent{
 		Main:  collisions.Player,
 		Group: collisions.Player,
