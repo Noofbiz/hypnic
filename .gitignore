@@ -1,0 +1,11 @@
+# Android Studio
+*.iml
+android/.gradle
+android/local.properties
+android/.idea/libraries
+android/.idea/modules.xml
+android/.idea/workspace.xml
+.DS_Store
+android/build
+android/captures
+android/.externalNativeBuild
