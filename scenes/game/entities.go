@@ -27,9 +27,15 @@ type player struct {
 	common.AnimationComponent
 	common.SpaceComponent
 	common.RenderComponent
-	common.CollisionComponent
 	control.Component
 	flash.FComponent
+}
+
+type playerHurtbox struct {
+	ecs.BasicEntity
+	common.SpaceComponent
+	common.CollisionComponent
+	control.Component
 }
 
 type shieldEntity struct {

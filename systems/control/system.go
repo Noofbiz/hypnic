@@ -12,9 +12,9 @@ import (
 
 // System is the system for controlling the player
 type System struct {
-	player entity
-	speed  float32
-	audio  *common.Player
+	entities []entity
+	speed    float32
+	audio    *common.Player
 }
 
 // New is called when the system is added to the world
@@ -33,14 +33,14 @@ func (s *System) New(w *ecs.World) {
 			return
 		}
 		engo.Mailbox.Dispatch(messages.GetPlayerPosition{
-			Position: s.player.SpaceComponent.Center(),
+			Position: s.entities[0].SpaceComponent.Center(),
 		})
 	})
 }
 
 // Add adds the player to the system
 func (s *System) Add(basic *ecs.BasicEntity, space *common.SpaceComponent, control *Component) {
-	s.player = entity{basic, space, control}
+	s.entities = append(s.entities, entity{basic, space, control})
 }
 
 // AddByInterface allows you to add a player as long as it implements the control interface
@@ -54,21 +54,24 @@ func (s *System) Remove(basic ecs.BasicEntity) {}
 
 // Update is called once per frame
 func (s *System) Update(dt float32) {
-	s.player.Position.Add(engo.Point{
-		X: s.speed * controlValue(),
-		Y: 0,
-	})
-	if s.player.Position.X < 31+options.XOffset {
-		engo.Mailbox.Dispatch(messages.Damage{
-			Amount: -5,
+	dx := s.speed * controlValue()
+	for _, e := range s.entities {
+		e.Position.Add(engo.Point{
+			X: dx,
+			Y: 0,
 		})
-		s.player.Position.X = 32 + options.XOffset
-	}
-	if s.player.Position.X > 256+options.XOffset {
-		engo.Mailbox.Dispatch(messages.Damage{
-			Amount: -5,
-		})
-		s.player.Position.X = 255 + options.XOffset
+		if e.Position.X < 31+options.XOffset+e.XOff {
+			engo.Mailbox.Dispatch(messages.Damage{
+				Amount: -2.5,
+			})
+			e.Position.X = 32 + options.XOffset + e.XOff
+		}
+		if e.Position.X > 256+options.XOffset+e.XOff {
+			engo.Mailbox.Dispatch(messages.Damage{
+				Amount: -2.5,
+			})
+			e.Position.X = 255 + options.XOffset + e.XOff
+		}
 	}
 }
 
@@ -79,6 +82,6 @@ func controlValue() float32 {
 	case "Touch":
 		return engo.Input.Axis(engo.DefaultMouseXAxis).Value()
 	default:
-		return engo.Input.Axis("movement").Value()
+		return engo.Input.Axis("movement").Value() * 2
 	}
 }

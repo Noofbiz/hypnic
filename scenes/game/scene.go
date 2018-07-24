@@ -300,16 +300,29 @@ func (s *Scene) Setup(u engo.Updater) {
 		X: 142 + options.XOffset,
 		Y: 91 + options.YOffset,
 	}
-	p.CollisionComponent = common.CollisionComponent{
-		Main:  collisions.Player,
-		Group: collisions.Player,
-	}
 	p.AnimationComponent = common.NewAnimationComponent(ps.Drawables(), 0.05)
 	p.AnimationComponent.AddAnimation(&common.Animation{
 		Name:   "flash",
 		Frames: []int{0, 1, 2, 3, 2, 1, 0},
 	})
 	w.AddEntity(&p)
+
+	// player hurtbox
+	phb := playerHurtbox{BasicEntity: ecs.NewBasic()}
+	phb.SpaceComponent = common.SpaceComponent{
+		Width:  25,
+		Height: 29,
+	}
+	phb.SpaceComponent.Position = engo.Point{
+		X: 147 + options.XOffset,
+		Y: 117 + options.YOffset,
+	}
+	phb.CollisionComponent = common.CollisionComponent{
+		Main:  collisions.Player,
+		Group: collisions.Player,
+	}
+	phb.Component.XOff = 5
+	w.AddEntity(&phb)
 
 	// background music
 	bp, _ := common.LoadedPlayer("bgm.mp3")
