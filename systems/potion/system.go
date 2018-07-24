@@ -23,10 +23,10 @@ type System struct {
 func (s *System) New(w *ecs.World) {
 	s.w = w
 	s.speed = 30
-	s.wait = 15
-	s.max = 20
-	s.min = 5
-	s.increment = 5
+	s.wait = 5
+	s.max = 10
+	s.min = 3
+	s.increment = 2
 
 	s.player, _ = common.LoadedPlayer("potion.wav")
 	s.player.SetVolume(options.TheOptions.SFXLevel)
@@ -40,9 +40,9 @@ func (s *System) New(w *ecs.World) {
 			return
 		}
 		s.speed += 5
-		s.max -= 1.75
+		s.max -= 0.75
 		s.min -= 0.25
-		s.increment += 0.5
+		s.increment += 0.25
 	})
 
 	engo.Mailbox.Listen("CollisionMessage", func(m engo.Message) {
@@ -113,7 +113,7 @@ func (s *System) Update(dt float32) {
 	}
 	for i := 0; i < len(s.entities); i++ {
 		s.entities[i].Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
-		if s.entities[i].Position.Y < -32+options.YOffset {
+		if s.entities[i].Position.Y < options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}

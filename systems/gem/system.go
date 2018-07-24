@@ -24,7 +24,7 @@ func (s *System) New(w *ecs.World) {
 	s.w = w
 	s.speed = 50
 	s.wait = 5
-	s.max = 15
+	s.max = 10
 	s.min = 1
 	s.increment = 3
 
@@ -113,7 +113,7 @@ func (s *System) Update(dt float32) {
 	}
 	for i := 0; i < len(s.entities); i++ {
 		s.entities[i].Position.Subtract(engo.Point{X: 0, Y: s.speed * dt})
-		if s.entities[i].Position.Y < -32+options.YOffset {
+		if s.entities[i].Position.Y < options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}

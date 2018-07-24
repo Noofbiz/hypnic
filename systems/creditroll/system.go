@@ -45,7 +45,7 @@ func (s *System) Update(dt float32) {
 			X: 0,
 			Y: s.speed * dt,
 		})
-		if s.entities[i].Position.Y < -50+options.YOffset {
+		if s.entities[i].Position.Y < -20+options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}

@@ -209,7 +209,7 @@ func (s *Scene) createLines(lines ...string) {
 		l.SpaceComponent.Width = l.RenderComponent.Drawable.Width() * l.RenderComponent.Scale.X
 		l.SpaceComponent.Height = l.RenderComponent.Drawable.Height() * l.RenderComponent.Scale.Y
 		l.SpaceComponent.Position = engo.Point{
-			X: (320-l.SpaceComponent.Width)/2 + ((320 - engo.WindowWidth()) / (2 * engo.GetGlobalScale().X)),
+			X: (320-l.SpaceComponent.Width)/2 + options.XOffset,
 			Y: s.curPos,
 		}
 		s.w.AddEntity(&l)

@@ -3,7 +3,6 @@
 package controllers
 
 import (
-	"log"
 	"sync"
 )
 
@@ -32,7 +31,6 @@ func GetAccelerometerValue() float32 {
 }
 
 func NewAccelerometerValue(v float32) {
-	log.Println(v)
 	lock.Lock()
 	value = (v - 0.5) * 6
 	lock.Unlock()

@@ -6,7 +6,7 @@ import (
 	"github.com/Noofbiz/hypnic/messages"
 )
 
-var timer []float32 = []float32{20, 25, 15, 10, 10}
+var timer = []float32{8, 8, 5, 4, 6}
 
 type System struct {
 	times   int

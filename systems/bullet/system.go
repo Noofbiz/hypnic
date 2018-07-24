@@ -41,7 +41,7 @@ func (s *System) New(w *ecs.World) {
 		if !ok {
 			return
 		}
-		s.speed += 0.5
+		s.speed += 0.75
 	})
 	engo.Mailbox.Listen(messages.CreateBulletType, func(m engo.Message) {
 		msg, ok := m.(messages.CreateBullet)
@@ -106,8 +106,12 @@ func (s *System) Update(dt float32) {
 			X: s.speed * sin,
 			Y: s.speed * cos,
 		})
-		if s.entities[i].Position.X < 31+options.XOffset ||
-			s.entities[i].Position.X > 256+options.XOffset {
+		if s.entities[i].Position.X < 31+options.XOffset {
+			s.entities[i].Position.X = 32
+			s.entities[i].Angle *= -1
+		}
+		if s.entities[i].Position.X > 255+options.XOffset {
+			s.entities[i].Position.X = 254
 			s.entities[i].Angle *= -1
 		}
 		if s.entities[i].Position.Y < options.YOffset {

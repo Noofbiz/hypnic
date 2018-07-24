@@ -28,13 +28,13 @@ type System struct {
 // New is called when the system is added to the World
 func (s *System) New(w *ecs.World) {
 	s.w = w
-	s.speed = 30
+	s.speed = 25
 	s.wait = 7
 	s.max = 10
 	s.min = 3
 	s.increment = 5
 	s.mincharges = 1
-	s.randcharges = 3
+	s.randcharges = 2
 	engo.Mailbox.Listen(messages.SpeedType, func(m engo.Message) {
 		_, ok := m.(messages.Speed)
 		if !ok {
@@ -44,7 +44,7 @@ func (s *System) New(w *ecs.World) {
 		s.min -= 0.15
 		s.increment += 0.5
 		s.mincharges++
-		s.randcharges += 2
+		s.randcharges++
 	})
 	engo.Mailbox.Listen(messages.GetPlayerPositionType, func(m engo.Message) {
 		msg, ok := m.(messages.GetPlayerPosition)
@@ -115,7 +115,7 @@ func (s *System) Update(dt float32) {
 			s.entities[i].elapsed = 0
 			s.entities[i].charges--
 		}
-		if s.entities[i].Position.Y < -66+options.YOffset {
+		if s.entities[i].Position.Y < options.YOffset {
 			s.w.RemoveEntity(*s.entities[i].BasicEntity)
 		}
 	}
@@ -129,7 +129,7 @@ func (s *System) addGargoyle() {
 	g.SpaceComponent = common.SpaceComponent{
 		Position: engo.Point{
 			X: rand.Float32()*(256-g.RenderComponent.Drawable.Width()) + 32 + options.XOffset,
-			Y: 480 + options.YOffset,
+			Y: 460 + options.YOffset,
 		},
 		Width:  g.RenderComponent.Drawable.Width(),
 		Height: g.RenderComponent.Drawable.Height(),
