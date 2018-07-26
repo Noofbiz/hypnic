@@ -16,7 +16,9 @@ import (
 	"github.com/Noofbiz/hypnic/systems/optionsbtn"
 )
 
-type Scene struct{}
+type Scene struct {
+	XCenter, YCenter float32
+}
 
 func (s *Scene) Type() string {
 	return "MainMenuScene"
@@ -52,8 +54,8 @@ func (s *Scene) Setup(u engo.Updater) {
 	common.SetBackground(color.Black)
 
 	// for canvas reasizing
-	options.XOffset = 3 * (320 - engo.WindowWidth()) / (8 * engo.GetGlobalScale().X)
-	options.YOffset = 3 * (480 - engo.WindowHeight()) / (8 * engo.GetGlobalScale().Y)
+	options.XOffset = (engo.ResizeXOffset + s.XCenter) / (2 * engo.GetGlobalScale().X)
+	options.YOffset = (engo.ResizeYOffset + s.YCenter) / (2 * engo.GetGlobalScale().Y)
 
 	// Add Render System
 	// To be added to the render system needs
@@ -63,11 +65,6 @@ func (s *Scene) Setup(u engo.Updater) {
 	var renderable *common.Renderable
 	var notrenderable *common.NotRenderable
 	w.AddSystemInterface(&common.RenderSystem{}, renderable, notrenderable)
-
-	// Add Mouse System
-	var mouseable *common.Mouseable
-	var notmouseable *common.NotMouseable
-	w.AddSystemInterface(&common.MouseSystem{}, mouseable, notmouseable)
 
 	// add audio system
 	var audioable *common.Audioable
@@ -176,14 +173,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	sg.RenderComponent.Drawable = sgs
 	sg.RenderComponent.SetZIndex(2)
 	sg.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 100 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 110 + options.YOffset,
 	}
 	sg.SpaceComponent.Width = sg.RenderComponent.Drawable.Width()
 	sg.SpaceComponent.Height = sg.RenderComponent.Drawable.Height()
 	sg.AudioComponent.Player = msfx
 	w.AddEntity(&sg)
-	start.Add(&sg.BasicEntity, &sg.MouseComponent, &sg.AudioComponent)
+	start.Add(&sg.BasicEntity, &sg.SpaceComponent, &sg.AudioComponent)
 
 	// Start game text
 	sgt := label{BasicEntity: ecs.NewBasic()}
@@ -203,14 +200,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	op.RenderComponent.Drawable = sgs
 	op.RenderComponent.SetZIndex(2)
 	op.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 180 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 190 + options.YOffset,
 	}
 	op.SpaceComponent.Width = op.RenderComponent.Drawable.Width()
 	op.SpaceComponent.Height = op.RenderComponent.Drawable.Height()
 	op.AudioComponent.Player = msfx
 	w.AddEntity(&op)
-	opts.Add(&op.BasicEntity, &op.MouseComponent, &op.AudioComponent)
+	opts.Add(&op.BasicEntity, &op.AudioComponent, &op.SpaceComponent)
 
 	// Options text
 	opt := label{BasicEntity: ecs.NewBasic()}
@@ -230,14 +227,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	c.RenderComponent.Drawable = sgs
 	c.RenderComponent.SetZIndex(2)
 	c.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 380 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 390 + options.YOffset,
 	}
 	c.SpaceComponent.Width = c.RenderComponent.Drawable.Width()
 	c.SpaceComponent.Height = c.RenderComponent.Drawable.Height()
 	c.AudioComponent.Player = msfx
 	w.AddEntity(&c)
-	crds.Add(&c.BasicEntity, &c.MouseComponent, &c.AudioComponent)
+	crds.Add(&c.BasicEntity, &c.SpaceComponent, &c.AudioComponent)
 
 	// Credits text
 	ct := label{BasicEntity: ecs.NewBasic()}

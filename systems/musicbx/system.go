@@ -24,28 +24,32 @@ func (s *System) New(w *ecs.World) {
 	s.utex = u
 }
 
-func (s *System) Add(basic *ecs.BasicEntity, mouse *common.MouseComponent,
+func (s *System) Add(basic *ecs.BasicEntity, space *common.SpaceComponent,
 	render *common.RenderComponent, audio *common.AudioComponent) {
-	s.e = entity{basic, mouse, render, audio}
+	s.e = entity{basic, space, render, audio}
 }
 
 func (s *System) Remove(basic ecs.BasicEntity) {}
 
 func (s *System) Update(float32) {
-	if s.e.Clicked {
-		if options.TheOptions.SFX {
-			s.e.AudioComponent.Player.Rewind()
-			s.e.AudioComponent.Player.Play()
+	if engo.Input.Mouse.Action == engo.Press {
+		x := engo.Input.Mouse.X + engo.ResizeXOffset/(2*engo.GetGlobalScale().X)
+		y := engo.Input.Mouse.Y + engo.ResizeYOffset/(2*engo.GetGlobalScale().Y)
+		if s.e.SpaceComponent.Contains(engo.Point{X: x, Y: y}) {
+			if options.TheOptions.SFX {
+				s.e.AudioComponent.Player.Rewind()
+				s.e.AudioComponent.Player.Play()
+			}
+			engo.Mailbox.Dispatch(messages.Music{
+				Cb: true,
+			})
+			if s.checked {
+				s.e.RenderComponent.Drawable = s.utex
+				s.checked = false
+				return
+			}
+			s.e.RenderComponent.Drawable = s.ctex
+			s.checked = true
 		}
-		engo.Mailbox.Dispatch(messages.Music{
-			Cb: true,
-		})
-		if s.checked {
-			s.e.RenderComponent.Drawable = s.utex
-			s.checked = false
-			return
-		}
-		s.e.RenderComponent.Drawable = s.ctex
-		s.checked = true
 	}
 }

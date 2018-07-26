@@ -54,11 +54,6 @@ func (s *Scene) Setup(u engo.Updater) {
 	var notrenderable *common.NotRenderable
 	w.AddSystemInterface(&common.RenderSystem{}, renderable, notrenderable)
 
-	// Add Mouse System
-	var mouseable *common.Mouseable
-	var notmouseable *common.NotMouseable
-	w.AddSystemInterface(&common.MouseSystem{}, mouseable, notmouseable)
-
 	// add game start system
 	restart := &gamerestart.System{}
 	w.AddSystem(restart)
@@ -129,13 +124,13 @@ func (s *Scene) Setup(u engo.Updater) {
 	sg.RenderComponent.Drawable = sgs
 	sg.RenderComponent.SetZIndex(2)
 	sg.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 100 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 110 + options.YOffset,
 	}
 	sg.SpaceComponent.Width = sg.RenderComponent.Drawable.Width()
 	sg.SpaceComponent.Height = sg.RenderComponent.Drawable.Height()
 	w.AddEntity(&sg)
-	restart.Add(&sg.BasicEntity, &sg.MouseComponent)
+	restart.Add(&sg.BasicEntity, &sg.SpaceComponent)
 
 	// Start game text
 	sgt := sprite{BasicEntity: ecs.NewBasic()}
@@ -145,7 +140,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	sgt.RenderComponent.SetZIndex(3)
 	sgt.SpaceComponent.Position = engo.Point{
-		X: 80 + options.XOffset,
+		X: 90 + options.XOffset,
 		Y: 130 + options.YOffset,
 	}
 	w.AddEntity(&sgt)
@@ -155,13 +150,13 @@ func (s *Scene) Setup(u engo.Updater) {
 	mm.RenderComponent.Drawable = sgs
 	mm.RenderComponent.SetZIndex(2)
 	mm.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 180 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 190 + options.YOffset,
 	}
 	mm.SpaceComponent.Width = mm.RenderComponent.Drawable.Width()
 	mm.SpaceComponent.Height = mm.RenderComponent.Drawable.Height()
 	w.AddEntity(&mm)
-	m.Add(&mm.BasicEntity, &mm.MouseComponent)
+	m.Add(&mm.BasicEntity, &mm.SpaceComponent)
 
 	// main menu text
 	mmt := sprite{BasicEntity: ecs.NewBasic()}
@@ -171,7 +166,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	mmt.RenderComponent.SetZIndex(3)
 	mmt.SpaceComponent.Position = engo.Point{
-		X: 80 + options.XOffset,
+		X: 90 + options.XOffset,
 		Y: 210 + options.YOffset,
 	}
 	w.AddEntity(&mmt)

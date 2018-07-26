@@ -21,7 +21,6 @@ type button struct {
 	ecs.BasicEntity
 	common.SpaceComponent
 	common.RenderComponent
-	common.MouseComponent
 	common.AudioComponent
 }
 

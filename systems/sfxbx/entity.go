@@ -7,7 +7,7 @@ import (
 
 type entity struct {
 	*ecs.BasicEntity
-	*common.MouseComponent
+	*common.SpaceComponent
 	*common.RenderComponent
 	*common.AudioComponent
 }

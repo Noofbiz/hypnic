@@ -43,6 +43,8 @@ public class EngoGLSurfaceView extends GLSurfaceView {
         }
     }
 
+    private double dDensity = getResources().getDisplayMetrics().density;
+
     public EngoGLSurfaceView(Context context) {
         super(context);
         initialize();
@@ -95,9 +97,7 @@ public class EngoGLSurfaceView extends GLSurfaceView {
                 outputStream = getContext().openFileOutput("opts.json",Context.MODE_PRIVATE);
                 outputStream.write(fileContents);
                 outputStream.close();
-            } catch (Exception ex) {
-                Log.println(Log.WARN, "basdfa", "Asfdsdf");
-            }
+            } catch (Exception ex) {}
         }
         return true;
     }

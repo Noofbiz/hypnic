@@ -110,8 +110,8 @@ func (s *System) Update(dt float32) {
 			s.entities[i].Position.X = 32
 			s.entities[i].Angle *= -1
 		}
-		if s.entities[i].Position.X > 255+options.XOffset {
-			s.entities[i].Position.X = 254
+		if s.entities[i].Position.X > 250+options.XOffset {
+			s.entities[i].Position.X = 249
 			s.entities[i].Angle *= -1
 		}
 		if s.entities[i].Position.Y < options.YOffset {

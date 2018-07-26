@@ -27,6 +27,10 @@ func IsRunning() bool {
 	return running
 }
 
+type touch struct {
+	curX, curY, touchID, touchAction int
+}
+
 func Touch(x, y, id, action int) {
 	engo.TouchEvent(x, y, id, action)
 }

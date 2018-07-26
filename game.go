@@ -13,14 +13,21 @@ import (
 
 func Start(width, height int) {
 	var gscale float32
-	scaleX := width / 320
-	scaleY := height / 480
+	var cX float32
+	var cY float32
+	scaleX := float32(width) / 320
+	scaleY := float32(height) / 480
 	if scaleX > scaleY {
-		gscale = float32(scaleY)
+		gscale = scaleY
+		cX = (float32(width) - 320*gscale)
 	} else {
-		gscale = float32(scaleX)
+		gscale = scaleX
+		cY = (float32(height) - 480*gscale)
 	}
-	engo.RegisterScene(&mainmenu.Scene{})
+	engo.RegisterScene(&mainmenu.Scene{
+		XCenter: cX,
+		YCenter: cY,
+	})
 	engo.RegisterScene(&game.Scene{})
 	engo.RegisterScene(&credits.Scene{})
 	engo.RegisterScene(&opts.Scene{})
@@ -35,5 +42,8 @@ func Start(width, height int) {
 			X: gscale,
 			Y: gscale,
 		},
-	}, &mainmenu.Scene{})
+	}, &mainmenu.Scene{
+		XCenter: cX,
+		YCenter: cY,
+	})
 }

@@ -61,11 +61,6 @@ func (s *Scene) Setup(u engo.Updater) {
 	var notrenderable *common.NotRenderable
 	w.AddSystemInterface(&common.RenderSystem{}, renderable, notrenderable)
 
-	// Add Mouse System
-	var mouseable *common.Mouseable
-	var notmouseable *common.NotMouseable
-	w.AddSystemInterface(&common.MouseSystem{}, mouseable, notmouseable)
-
 	// add audio system
 	var audioable *common.Audioable
 	var notaudioable *common.NotAudioable
@@ -209,14 +204,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	}
 	mcb.RenderComponent.SetZIndex(3)
 	mcb.SpaceComponent.Position = engo.Point{
-		X: 135 + options.XOffset,
-		Y: 185 + options.YOffset,
+		X: 140 + options.XOffset,
+		Y: 195 + options.YOffset,
 	}
 	mcb.SpaceComponent.Width = mcb.RenderComponent.Drawable.Width()
 	mcb.SpaceComponent.Height = mcb.RenderComponent.Drawable.Height()
 	mcb.AudioComponent.Player = msfx
 	w.AddEntity(&mcb)
-	mcbx.Add(&mcb.BasicEntity, &mcb.MouseComponent, &mcb.RenderComponent, &mcb.AudioComponent)
+	mcbx.Add(&mcb.BasicEntity, &mcb.SpaceComponent, &mcb.RenderComponent, &mcb.AudioComponent)
 
 	// Music control bg
 	mcbgs, _ := common.LoadedSprite("sound.png")
@@ -260,14 +255,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	md.RenderComponent.Drawable = mds
 	md.RenderComponent.SetZIndex(3)
 	md.SpaceComponent.Position = engo.Point{
-		X: 36 + options.XOffset,
-		Y: 219 + options.YOffset,
+		X: 47 + options.XOffset,
+		Y: 228 + options.YOffset,
 	}
 	md.SpaceComponent.Width = md.RenderComponent.Drawable.Width()
 	md.SpaceComponent.Height = md.RenderComponent.Drawable.Height()
 	md.AudioComponent.Player = msfx
 	w.AddEntity(&md)
-	mdown.Add(&md.BasicEntity, &md.MouseComponent, &md.AudioComponent)
+	mdown.Add(&md.BasicEntity, &md.SpaceComponent, &md.AudioComponent)
 
 	// Music raise
 	mrs, _ := common.LoadedSprite("raise.png")
@@ -275,14 +270,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	mr.RenderComponent.Drawable = mrs
 	mr.RenderComponent.SetZIndex(3)
 	mr.SpaceComponent.Position = engo.Point{
-		X: 238 + options.XOffset,
-		Y: 219 + options.YOffset,
+		X: 244 + options.XOffset,
+		Y: 226 + options.YOffset,
 	}
 	mr.SpaceComponent.Width = mr.RenderComponent.Drawable.Width()
 	mr.SpaceComponent.Height = mr.RenderComponent.Drawable.Height()
 	mr.AudioComponent.Player = msfx
 	w.AddEntity(&mr)
-	mup.Add(&mr.BasicEntity, &mr.MouseComponent, &mr.AudioComponent)
+	mup.Add(&mr.BasicEntity, &mr.SpaceComponent, &mr.AudioComponent)
 
 	// SFX label]
 	sl := label{BasicEntity: ecs.NewBasic()}
@@ -307,13 +302,13 @@ func (s *Scene) Setup(u engo.Updater) {
 	scb.RenderComponent.SetZIndex(3)
 	scb.SpaceComponent.Position = engo.Point{
 		X: 115 + options.XOffset,
-		Y: 285 + options.YOffset,
+		Y: 295 + options.YOffset,
 	}
 	scb.SpaceComponent.Width = scb.RenderComponent.Drawable.Width()
 	scb.SpaceComponent.Height = scb.RenderComponent.Drawable.Height()
 	scb.AudioComponent.Player = msfx
 	w.AddEntity(&scb)
-	scbx.Add(&scb.BasicEntity, &scb.MouseComponent, &scb.RenderComponent, &scb.AudioComponent)
+	scbx.Add(&scb.BasicEntity, &scb.SpaceComponent, &scb.RenderComponent, &scb.AudioComponent)
 
 	// SFX control bg
 	scbg := label{BasicEntity: ecs.NewBasic()}
@@ -355,42 +350,42 @@ func (s *Scene) Setup(u engo.Updater) {
 	sd.RenderComponent.Drawable = mds
 	sd.RenderComponent.SetZIndex(3)
 	sd.SpaceComponent.Position = engo.Point{
-		X: 36 + options.XOffset,
-		Y: 319 + options.YOffset,
+		X: 47 + options.XOffset,
+		Y: 328 + options.YOffset,
 	}
 	sd.SpaceComponent.Width = sd.RenderComponent.Drawable.Width()
 	sd.SpaceComponent.Height = sd.RenderComponent.Drawable.Height()
 	sd.AudioComponent.Player = msfx
 	w.AddEntity(&sd)
-	sfxd.Add(&sd.BasicEntity, &sd.MouseComponent, &sd.AudioComponent)
+	sfxd.Add(&sd.BasicEntity, &sd.SpaceComponent, &sd.AudioComponent)
 
 	// SFX raise
 	sr := button{BasicEntity: ecs.NewBasic()}
 	sr.RenderComponent.Drawable = mrs
 	sr.RenderComponent.SetZIndex(3)
 	sr.SpaceComponent.Position = engo.Point{
-		X: 238 + options.XOffset,
-		Y: 319 + options.YOffset,
+		X: 244 + options.XOffset,
+		Y: 325 + options.YOffset,
 	}
 	sr.SpaceComponent.Width = sr.RenderComponent.Drawable.Width()
 	sr.SpaceComponent.Height = sr.RenderComponent.Drawable.Height()
 	sr.AudioComponent.Player = msfx
 	w.AddEntity(&sr)
-	sfxu.Add(&sr.BasicEntity, &sr.MouseComponent, &sr.AudioComponent)
+	sfxu.Add(&sr.BasicEntity, &sr.SpaceComponent, &sr.AudioComponent)
 
 	// backbutton
 	bb := button{BasicEntity: ecs.NewBasic()}
 	bb.RenderComponent.Drawable = sgs
 	bb.RenderComponent.SetZIndex(2)
 	bb.SpaceComponent.Position = engo.Point{
-		X: 20 + options.XOffset,
-		Y: 100 + options.YOffset,
+		X: 50 + options.XOffset,
+		Y: 110 + options.YOffset,
 	}
 	bb.SpaceComponent.Width = bb.RenderComponent.Drawable.Width()
 	bb.SpaceComponent.Height = bb.RenderComponent.Drawable.Height()
 	bb.AudioComponent.Player = msfx
 	w.AddEntity(&bb)
-	sbbtn.Add(&bb.BasicEntity, &bb.MouseComponent, &bb.AudioComponent)
+	sbbtn.Add(&bb.BasicEntity, &bb.SpaceComponent, &bb.AudioComponent)
 	sfxadj.Add(&bb.BasicEntity, &bb.AudioComponent)
 
 	// back button text
@@ -450,14 +445,14 @@ func (s *Scene) Setup(u engo.Updater) {
 	cd.RenderComponent.Drawable = mds
 	cd.RenderComponent.SetZIndex(3)
 	cd.SpaceComponent.Position = engo.Point{
-		X: 36 + options.XOffset,
-		Y: 401 + options.YOffset,
+		X: 47 + options.XOffset,
+		Y: 408 + options.YOffset,
 	}
 	cd.SpaceComponent.Width = cd.RenderComponent.Drawable.Width()
 	cd.SpaceComponent.Height = cd.RenderComponent.Drawable.Height()
 	cd.AudioComponent.Player = msfx
 	w.AddEntity(&cd)
-	cdown.Add(&cd.BasicEntity, &cd.MouseComponent)
+	cdown.Add(&cd.BasicEntity, &cd.SpaceComponent)
 
 	// controls raise
 	craise := &controlup.System{}
@@ -466,12 +461,12 @@ func (s *Scene) Setup(u engo.Updater) {
 	cr.RenderComponent.Drawable = mrs
 	cr.RenderComponent.SetZIndex(3)
 	cr.SpaceComponent.Position = engo.Point{
-		X: 238 + options.XOffset,
-		Y: 399 + options.YOffset,
+		X: 244 + options.XOffset,
+		Y: 405 + options.YOffset,
 	}
 	cr.SpaceComponent.Width = cr.RenderComponent.Drawable.Width()
 	cr.SpaceComponent.Height = cr.RenderComponent.Drawable.Height()
 	cr.AudioComponent.Player = msfx
 	w.AddEntity(&cr)
-	craise.Add(&cr.BasicEntity, &cr.MouseComponent)
+	craise.Add(&cr.BasicEntity, &cr.SpaceComponent)
 }
