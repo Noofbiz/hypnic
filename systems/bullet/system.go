@@ -107,11 +107,11 @@ func (s *System) Update(dt float32) {
 			Y: s.speed * cos,
 		})
 		if s.entities[i].Position.X < 31+options.XOffset {
-			s.entities[i].Position.X = 32
+			s.entities[i].Position.X = 32 + options.XOffset
 			s.entities[i].Angle *= -1
 		}
-		if s.entities[i].Position.X > 250+options.XOffset {
-			s.entities[i].Position.X = 249
+		if s.entities[i].Position.X > 255+options.XOffset {
+			s.entities[i].Position.X = 254 + options.XOffset
 			s.entities[i].Angle *= -1
 		}
 		if s.entities[i].Position.Y < options.YOffset {

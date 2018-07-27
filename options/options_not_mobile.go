@@ -11,8 +11,8 @@ import (
 
 func LoadOptions() error {
 	// for creating executables
-	//exep, err := os.Executable()
-	//if err != nil {
+	// exep, err := os.Executable()
+	// if err != nil {
 	//	return err
 	//}
 	//location = filepath.Join(filepath.Dir(exep), "data", "opts.json")

@@ -97,7 +97,6 @@ func (s *System) Update(dt float32) {
 	if s.changed {
 		s.elapsed += dt
 		if s.health.Health <= 0 {
-			s.health.RenderComponent.Hidden = true
 			s.changed = false
 			engo.Mailbox.Dispatch(messages.GameOver{})
 			return
