@@ -27,10 +27,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         try {
             senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_GAME_ROTATION_VECTOR);
-            senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
-            Androidglue.accelerometerPresent(true);
+            boolean ispresent = senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+            Androidglue.accelerometerPresent(ispresent);
         } catch (Exception e) {
-            Log.println(Log.WARN, "exception", "no accelerometer");
+            Log.println(Log.WARN, "exception", "problem loading accelerometer");
         }
     }
 

@@ -9,3 +9,4 @@ android/.idea/workspace.xml
 android/build
 android/captures
 android/.externalNativeBuild
+android/androidglue
