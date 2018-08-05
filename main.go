@@ -19,9 +19,10 @@ func main() {
 	engo.RegisterScene(&opts.Scene{})
 	options.LoadOptions()
 	engo.Run(engo.RunOptions{
-		Width:    320,
-		Height:   480,
-		FPSLimit: 30,
-		Title:    "hypnic",
+		Width:        320,
+		Height:       480,
+		FPSLimit:     30,
+		NotResizable: true,
+		Title:        "hypnic",
 	}, &mainmenu.Scene{})
 }

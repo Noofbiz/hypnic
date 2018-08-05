@@ -181,6 +181,9 @@ func (s *Scene) Setup(u engo.Updater) {
 
 	// Gaegu
 	s.createLines("Gaegu", "JIKJI SOFT", "fonts.google.com/specimen/Gaegu")
+
+	// Made in
+	s.createLines("Made in", "engo", "engo.io")
 }
 
 func (s *Scene) createLines(lines ...string) {
