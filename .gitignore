@@ -10,3 +10,6 @@ android/build
 android/captures
 android/.externalNativeBuild
 android/androidglue
+
+# Data
+data/opts.json
