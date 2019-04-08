@@ -1,6 +1,6 @@
 package messages
 
-import "engo.io/engo"
+import "github.com/EngoEngine/engo"
 
 // CreateBulletType is the type for the bullet message
 const CreateBulletType string = "CreateBulletMessage"

@@ -3,8 +3,8 @@ package newhighscore
 import (
 	"image/color"
 
-	"engo.io/ecs"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo/common"
 )
 
 type System struct {

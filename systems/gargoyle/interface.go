@@ -1,6 +1,6 @@
 package gargoyle
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 // Face is an entity that is a gargoyle
 type Face interface {

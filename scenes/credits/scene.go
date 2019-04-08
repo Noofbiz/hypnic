@@ -5,9 +5,9 @@ import (
 	"image/color"
 	"log"
 
-	"engo.io/ecs"
-	"engo.io/engo"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo"
+	"github.com/EngoEngine/engo/common"
 
 	"github.com/Noofbiz/hypnic/assets"
 	"github.com/Noofbiz/hypnic/options"
@@ -183,7 +183,7 @@ func (s *Scene) Setup(u engo.Updater) {
 	s.createLines("Gaegu", "JIKJI SOFT", "fonts.google.com/specimen/Gaegu")
 
 	// Made in
-	s.createLines("Made in", "engo", "engo.io")
+	s.createLines("Made in", "engo", "engoengine.github.io")
 }
 
 func (s *Scene) createLines(lines ...string) {

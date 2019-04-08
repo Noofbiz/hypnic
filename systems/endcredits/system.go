@@ -1,8 +1,8 @@
 package endcredits
 
 import (
-	"engo.io/ecs"
-	"engo.io/engo"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo"
 )
 
 type System struct{}

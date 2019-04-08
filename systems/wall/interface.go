@@ -1,6 +1,6 @@
 package wall
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 // Face is something able to retrieve it's wall Component
 type Face interface {

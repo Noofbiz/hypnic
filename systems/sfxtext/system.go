@@ -5,9 +5,9 @@ import (
 	"math"
 	"strconv"
 
-	"engo.io/ecs"
-	"engo.io/engo"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo"
+	"github.com/EngoEngine/engo/common"
 
 	"github.com/Noofbiz/hypnic/messages"
 	"github.com/Noofbiz/hypnic/options"

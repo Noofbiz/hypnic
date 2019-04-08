@@ -1,8 +1,8 @@
 package credits
 
 import (
-	"engo.io/ecs"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo/common"
 
 	"github.com/Noofbiz/hypnic/systems/creditroll"
 )

@@ -1,6 +1,6 @@
 package creditroll
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 // Face is the interface for an entity with a bullet component
 type Face interface {

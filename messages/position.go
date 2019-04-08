@@ -1,6 +1,6 @@
 package messages
 
-import "engo.io/engo"
+import "github.com/EngoEngine/engo"
 
 const GetPlayerPositionType string = "GetPlayerPositionMessage"
 

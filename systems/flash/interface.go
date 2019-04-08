@@ -1,6 +1,6 @@
 package flash
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 // Face is the flash component's interface
 type Face interface {

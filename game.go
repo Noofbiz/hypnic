@@ -3,7 +3,7 @@
 package hypnic
 
 import (
-	"engo.io/engo"
+	"github.com/EngoEngine/engo"
 
 	"github.com/Noofbiz/hypnic/scenes/credits"
 	"github.com/Noofbiz/hypnic/scenes/game"

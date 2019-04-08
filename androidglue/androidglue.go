@@ -9,7 +9,7 @@ import (
 	"github.com/Noofbiz/hypnic/controllers"
 	"github.com/Noofbiz/hypnic/options"
 
-	"engo.io/engo"
+	"github.com/EngoEngine/engo"
 )
 
 var running bool

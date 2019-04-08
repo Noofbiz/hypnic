@@ -1,8 +1,8 @@
 package mainmenu
 
 import (
-	"engo.io/ecs"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo/common"
 )
 
 type background struct {

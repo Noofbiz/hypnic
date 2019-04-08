@@ -1,6 +1,6 @@
 package control
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 // Face is an interface to get the control component
 type Face interface {

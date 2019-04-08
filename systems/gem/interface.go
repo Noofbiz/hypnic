@@ -1,6 +1,6 @@
 package gem
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 type Face interface {
 	GetGemComponent() *Component

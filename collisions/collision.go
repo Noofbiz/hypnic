@@ -1,6 +1,6 @@
 package collisions
 
-import "engo.io/engo/common"
+import "github.com/EngoEngine/engo/common"
 
 const (
 	// Player is the player

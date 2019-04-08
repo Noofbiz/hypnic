@@ -1,8 +1,8 @@
 package game
 
 import (
-	"engo.io/ecs"
-	"engo.io/engo/common"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo/common"
 
 	"github.com/Noofbiz/hypnic/systems/control"
 	"github.com/Noofbiz/hypnic/systems/flash"

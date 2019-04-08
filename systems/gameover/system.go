@@ -1,8 +1,8 @@
 package gameover
 
 import (
-	"engo.io/ecs"
-	"engo.io/engo"
+	"github.com/EngoEngine/ecs"
+	"github.com/EngoEngine/engo"
 
 	"github.com/Noofbiz/hypnic/messages"
 	"github.com/Noofbiz/hypnic/scenes/gameend"
